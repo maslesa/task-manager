@@ -1,0 +1,45 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+@import "tailwindcss";
+
+@theme{
+    --color-my-back: #F5EEDD;
+    --color-my-back50: #F5EEDD80;
+    --color-my-blue1: #7AE2CF;
+    --color-my-blue2: #077A7D;
+    --color-my-blue3: #06202B;
+    --color-my-light: #FCFAEE;
+
+    --font-roboto: "Roboto", sans-serif; 
+}
+
+@layer utilities {
+    @keyframes scale-pulse {
+      0%, 100% {
+        transform: scale(0.95);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
+  
+    .animate-scale-pulse {
+      animation: scale-pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes fade-in-out {
+      0% { opacity: 0; transform: translateY(-10px); }
+      10% { opacity: 1; transform: translateY(0); }
+      90% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-10px); }
+    }
+  
+    .animate-fade-in-out {
+      animation: fade-in-out 3s ease-in-out;
+    }
+
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  

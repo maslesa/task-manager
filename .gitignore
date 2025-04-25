@@ -1,0 +1,5 @@
+client/task-manager/node_modules
+
+server/node_modules
+server/.env
+

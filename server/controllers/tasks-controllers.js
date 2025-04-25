@@ -1,0 +1,143 @@
+const Task = require('../models/Task');
+
+const postTask = async(req, res) => {
+    try {
+        const userId = req.userInfo.id;
+        const {title, description, deadline, priority} = req.body;
+
+        const newTask = new Task({
+            title: title,
+            description: description,
+            deadline: deadline,
+            priority: priority,
+            uploadedBy: userId
+        })
+
+        await newTask.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'Task has uploaded successfully',
+            data: newTask
+        })
+
+    } catch (error) {
+        console.log('Something went wrong');
+        res.status(500).json({
+            success: false,
+            message: 'something went wrong'
+        })
+    }
+}
+
+const fetchAllTasks = async(req, res) => {
+    try {
+        const userId = req.userInfo.id;
+        const userTasks = await Task.find({uploadedBy: userId});        
+        if(userTasks.length > 0){
+            res.status(200).json({
+                success: true,
+                message: "User's tasks found successfully",
+                data: userTasks
+            })
+        }else{
+            res.status(200).json({
+                success: true,
+                message: "No tasks found"
+            })
+        }
+    } catch (error) {
+        console.log('Something went wrong');
+        res.status(500).json({
+            success: false,
+            message: 'something went wrong'
+        })
+    }
+}
+
+const fetchTask = async(req, res) => {
+    try {
+        const taskId = req.params.id;
+        const task = await Task.findById(taskId);
+        if(!task){
+            res.status(404).json({
+                success: false,
+                message: "Task with that id is not found"
+            })
+        }else{
+            res.status(200).json({
+                success: true,
+                message: "Task found successfully",
+                data: task
+            })
+        }
+    } catch (error) {
+        console.log('Something went wrong');
+        res.status(500).json({
+            success: false,
+            message: 'something went wrong'
+        })
+    }
+}
+
+const updateTask = async(req, res) => {
+    try {
+        const taskId = req.params.id;
+        const userInput = req.body;
+        const updatedTask = await Task.findByIdAndUpdate(
+            taskId,
+            userInput,
+            {new: true}
+        )
+        if(!updatedTask){
+            res.status(404).json({
+                success: false,
+                message: "Task with that id is not found"
+            })
+        }else{
+            res.status(200).json({
+                success: true,
+                message: "Task updated successfully",
+                data: updatedTask
+            })
+        }
+    } catch (error) {
+        console.log('Something went wrong');
+        res.status(500).json({
+            success: false,
+            message: 'something went wrong'
+        })
+    }
+}
+
+const deleteTask = async(req, res) => {
+    try {
+        const taskId = req.params.id;
+        const deletedTask = await Task.findByIdAndDelete(taskId);
+        if(!deletedTask){
+            res.status(404).json({
+                success: false,
+                message: "Task with that id is not found"
+            })
+        }else{
+            res.status(200).json({
+                success: true,
+                message: "Task deleted successfully",
+            })
+        }
+    } catch (error) {
+        console.log('Something went wrong');
+        res.status(500).json({
+            success: false,
+            message: 'something went wrong'
+        })
+    }
+}
+
+module.exports = {
+    postTask,
+    fetchAllTasks,
+    fetchTask,
+    updateTask,
+    deleteTask
+}
