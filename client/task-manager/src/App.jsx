@@ -3,6 +3,7 @@ import WelcomePage from "./WelcomePage";
 import RegistrationPage from "./RegisterPage";
 import LoginPage from "./LoginPage";
 import Tasks from "./Tasks";
+import AllTasks from "./AllTasks";
 
 function App() {
 
@@ -12,6 +13,7 @@ function App() {
         <Route path="/" element={<WelcomePage />}></Route>
         <Route path="/signup" element={<RegistrationPage />}></Route>
         <Route path="/signin" element={<LoginPage />}></Route>
+        <Route path="/home" element={<Tasks />}></Route>
         <Route path="/tasks" element={<Tasks />}></Route>
       </Routes>
     </Router>

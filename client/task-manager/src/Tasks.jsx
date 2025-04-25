@@ -1,33 +1,31 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import DatePicker from "react-datepicker";
-
+import { useNavigate } from "react-router-dom";
 
 function Tasks(){
 
     const token = localStorage.getItem('token');
+    const axiosConfig = {
+        headers: { Authorization : `Bearer ${token}` }
+    }
     const user = JSON.parse(localStorage.getItem('user'));
+    const navigate = useNavigate();
 
     const [tasks, setTasks] = useState([]);
-
+    const [showAlertSuccess, setShowAlertSuccess] = useState(false);
+    const [showAlertFailed, setShowAlertFailed] = useState(false);
     const [showNewTaskDialog, setShowNewTaskDialog] = useState(false);
+    const [showUserMenu, setShowUserMenu] = useState(false);
     const [newTask, setNewTask] = useState({
         title: '',
         description: '',
         priority: 'medium'
     });
     
-    const axiosConfig = {
-        headers: { Authorization : `Bearer ${token}` }
-    }
-
     const fetchTasks = async() => {
         const res = await axios.get('http://localhost:3000/task/', axiosConfig);
         setTasks(res.data.data);
     }
-
-    const [showAlertSuccess, setShowAlertSuccess] = useState(false);
-    const [showAlertFailed, setShowAlertFailed] = useState(false);
     const addNewTask = async() => {
         try {
             await axios.post('http://localhost:3000/task/post', newTask, axiosConfig);
@@ -66,7 +64,7 @@ function Tasks(){
                 {/* ADD NEW TASK */}
                 {showNewTaskDialog && (
                     <div className="fixed inset-0 bg-my-back50 flex justify-center items-center z-40" onClick={() => setShowNewTaskDialog(false)}>
-                        <div className="w-1/3 h-3/4 bg-my-blue3 flex flex-col justify-center items-center rounded-2xl shadow-2xl z-50" onClick={(e) => e.stopPropagation()}    >
+                        <div className="w-1/3 h-3/4 bg-my-blue3 flex flex-col justify-center items-center rounded-2xl shadow-2xl z-50" onClick={(e) => e.stopPropagation()}>
                             <div className="w-full h-1/4 flex justify-center items-center">
                                 <p className="text-my-back text-2xl font-bold font-roboto">Add New Task</p>
                             </div>
@@ -99,6 +97,66 @@ function Tasks(){
                         </div>
                   </div>
                 )}
+                {/* USER MENU */}
+                {showUserMenu && (
+                    <div className="fixed inset-0 bg-my-back50 flex justify-end items-center z-40" onClick={() => setShowUserMenu(false)}>
+                        <div className={`w-[400px] h-screen bg-my-blue3 flex flex-col justify-baseline items-center shadow-2xl z-50 pt-15 relative transition-transform duration-500 ease-in-out ${showUserMenu ? "translate-x-0" : "translate-x-full"} `} onClick={(e) => e.stopPropagation()}>
+                            <div className="flex gap-5 mb-5 border-b-2 pb-7 border-my-back w-5/6">
+                                <div className="flex justify-center items-center">
+                                    <div onClick={() => setShowUserMenu(false)} className="shadow-lg w-12 h-12 bg-my-back rounded-[200px] flex justify-center items-center font-roboto font-bold text-xl text-my-blue3 cursor-pointer hover:scale-102 duration-200 ease-in-out">
+                                        {user.username.charAt(0).toUpperCase()}
+                                    </div>
+                                </div>
+                                <div>
+                                    <h2 className="font-roboto font-bold text-my-back">{user.username}</h2>
+                                    <h3 className="font-roboto font-base text-my-back50">{user.email}</h3>
+                                </div>
+                            </div>
+                            <div className="w-5/6 flex flex-col gap-2 border-b-2 pb-7 border-my-back mb-5">
+                                <div className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
+                                    <img className="w-6" src="/user.png" alt="acc" />
+                                    <h3 className="font-roboto font-base text-my-back">Account settings</h3>
+                                </div>
+                                <div className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
+                                    <img className="w-6" src="/password.png" alt="alltasks" />
+                                    <h3 className="font-roboto font-base text-my-back">Password settings</h3>
+                                </div>
+                            </div>
+                            <div className="w-5/6 flex flex-col gap-2 border-b-2 pb-7 border-my-back">
+                                <div onClick={() => {setShowUserMenu(false); setShowNewTaskDialog(true)}} className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
+                                    <img className="w-6" src="/addtask.png" alt="alltasks" />
+                                    <h3 className="font-roboto font-base text-my-back">Add new task</h3>
+                                </div>
+                                <div className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
+                                    <img className="w-6" src="/alltasks.png" alt="alltasks" />
+                                    <h3 className="font-roboto font-base text-my-back">All tasks</h3>
+                                </div>
+                                <div className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
+                                    <img className="w-6" src="/importanttasks.png" alt="alltasks" />
+                                    <h3 className="font-roboto font-base text-my-back">Important tasks</h3>
+                                </div>
+                                <div className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
+                                    <img className="w-6" src="/today.png" alt="alltasks" />
+                                    <h3 className="font-roboto font-base text-my-back">Today tasks</h3>
+                                </div>
+                                <div className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
+                                    <img className="w-6" src="/done.png" alt="alltasks" />
+                                    <h3 className="font-roboto font-base text-my-back">Completed tasks</h3>
+                                </div>
+                                <div className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
+                                    <img className="w-6" src="/cancel.png" alt="alltasks" />
+                                    <h3 className="font-roboto font-base text-my-back">Uncompleted tasks</h3>
+                                </div>
+                            </div>
+                            <div className="w-full h-30 absolute bottom-0 flex justify-center items-center">
+                                <div onClick={() => {navigate('/signin')}} className="flex gap-2 justify-center items-center cursor-pointer">
+                                    <img className="w-6" src="/logout.png" alt="logout" />
+                                    <h1 className="font-roboto text-lg text-my-back">Sign out</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
                 {/* HEADER */}
                 <div className="max-w-screen w-full h-[120px] flex pl-20 pr-20 justify-between mb-5">
                     <a className="flex gap-1 justify-center items-center" href="/tasks">
@@ -106,7 +164,7 @@ function Tasks(){
                         <h2 className="font-roboto font-black text-2xl text-my-blue3">TaskManager</h2>
                     </a>
                     <div className="flex justify-center items-center">
-                        <div className="shadow-lg w-12 h-12 bg-my-blue3 rounded-[200px] flex justify-center items-center font-roboto font-bold text-xl text-my-back cursor-pointer hover:scale-102 duration-200 ease-in-out">
+                        <div onClick={() => setShowUserMenu(true)} className="shadow-lg w-12 h-12 bg-my-blue3 rounded-[200px] flex justify-center items-center font-roboto font-bold text-xl text-my-back cursor-pointer hover:scale-102 duration-200 ease-in-out">
                             {user.username.charAt(0).toUpperCase()}
                         </div>
                     </div>
@@ -120,7 +178,7 @@ function Tasks(){
                         </div>
                     </div>
                     <div className="grid grid-cols-3">
-                        {tasks
+                        {tasks && tasks.length > 0 && tasks
                         .filter((task) => task.priority === 'high' || task.priority === 'very high')
                         .map((task) => {
                             const showWarning = task.priority === 'high' || task.priority === 'very high';
@@ -131,7 +189,7 @@ function Tasks(){
                                             {task.priority}
                                         </div>
                                     )}
-                                    <h3 className="font-robot font-bold text-2xl text-my-blue3">{task.title}</h3>
+                                    <h3 className="font-robot font-bold text-2xl text-my-blue3 max-w-2/3">{task.title}</h3>
                                     <p className="font-robot font-normal text-md text-my-blue3 mb-3 text-justify">{task.description}</p>
                                     <p className="text-sm text-gray-500">Priority: {task.priority}</p>
                                 </div>
@@ -155,7 +213,7 @@ function Tasks(){
                         </div>
                     </div>
                     <div className="w-full grid grid-cols-3">
-                        {tasks.map((task) => {
+                        {tasks && tasks.length > 0 && tasks.map((task) => {
                             const showWarning = task.priority === 'high' || task.priority === 'very high';
                             return(
                                 <div key={task._id} className="relative shadow-lg p-4 m-2 border-2 border-my-blue3 rounded-2xl bg-my-light h-50 hover:scale-101 duration-200 ease-in-out cursor-pointer">
@@ -164,9 +222,14 @@ function Tasks(){
                                             {task.priority}
                                         </div>
                                     )}
-                                    <h3 className="font-robot font-bold text-2xl text-my-blue3">{task.title}</h3>
+                                    <h3 className="font-robot font-bold text-2xl text-my-blue3 max-w-2/3">{task.title}</h3>
                                     <p className="font-robot font-normal text-md text-my-blue3 mb-3 text-justify">{task.description}</p>
-                                    <p className="text-sm text-gray-500">Priority: {task.priority}</p>
+                                    <p className="text-sm text-gray-500 mb-3">Priority: {task.priority}</p>
+                                    <div className="flex items-center">
+                                        <p className="text-sm text-gray-500 mr-2">Status:</p>
+                                        <div className="w-3 h-3 bg-red-700 mr-1 rounded-2xl"></div>
+                                        <p className="text-sm text-gray-500">{task.status}</p>
+                                    </div>
                                 </div>
                             );
                         })}

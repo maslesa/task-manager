@@ -20,7 +20,7 @@ function LoginPage(){
             setShowAlertSuccess(true);
             setTimeout(() => {
                 setShowAlertSuccess(false);
-                navigate('/tasks');
+                navigate('/home');
             }, 1000);
         } catch (error) {
             setShowAlertFailed(true);
