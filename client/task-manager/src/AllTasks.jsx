@@ -155,13 +155,13 @@ function AllTasks(){
                                 </div>
                             </div>
                             <div className="w-5/6 flex flex-col gap-2 border-b-2 pb-7 border-my-back mb-5">
-                                <div className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
+                                <div onClick={() => {navigate('/account/settings')}} className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
                                     <img className="w-6" src="/user.png" alt="acc" />
                                     <h3 className="font-roboto font-base text-my-back">Account settings</h3>
                                 </div>
-                                <div className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
+                                <div onClick={() => {navigate('/account/password');}} className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
                                     <img className="w-6" src="/password.png" alt="alltasks" />
-                                    <h3 className="font-roboto font-base text-my-back">Password settings</h3>
+                                    <h3 className="font-roboto font-base text-my-back">Change password</h3>
                                 </div>
                             </div>
                             <div className="w-5/6 flex flex-col gap-2 border-b-2 pb-7 border-my-back">

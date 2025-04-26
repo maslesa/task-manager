@@ -5,6 +5,8 @@ import LoginPage from "./LoginPage";
 import Tasks from "./Tasks";
 import AllTasks from "./AllTasks";
 import ImportantTasks from "./ImportantTasks";
+import AccountSettings from "./AccountSettings";
+import ChangePassword from "./ChangePassword";
 
 function App() {
 
@@ -17,6 +19,8 @@ function App() {
         <Route path="/home" element={<Tasks />}></Route>
         <Route path="/tasks" element={<AllTasks />}></Route>
         <Route path="/tasks/important" element={<ImportantTasks />}></Route>
+        <Route path="/account/settings" element={<AccountSettings />}></Route>
+        <Route path="/account/password" element={<ChangePassword />}></Route>
       </Routes>
     </Router>
   )
