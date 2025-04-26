@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 function ImportantTasks(){
@@ -21,6 +21,10 @@ function ImportantTasks(){
         description: '',
         priority: 'medium'
     });
+    const [showUndoMessage, setShowUndoMessage] = useState(false);
+    const [undoDelete, setUndoDelete] = useState(false);
+    const [deletedTaskNotif, setDeletedTaskNotif] = useState(false);
+    const undoDeleteRef = useRef(false);
 
     const fetchImportantTasks = async() => {
         const res = await axios.get('http://localhost:3000/task/important', axiosConfig);
@@ -44,12 +48,49 @@ function ImportantTasks(){
         }
     }
 
+    async function deleteTask(taskId){
+        await axios.delete(`http://localhost:3000/task/delete/${taskId}`, axiosConfig);
+        fetchImportantTasks();
+    }
+
+    async function tryDeleteTask(taskId){
+        try {
+            setShowUndoMessage(true);            
+            setUndoDelete(false);
+            undoDeleteRef.current = false;
+            setTimeout(async() => {
+                setShowUndoMessage(false);
+                if(!undoDeleteRef.current){
+                    await deleteTask(taskId);
+                    setDeletedTaskNotif(true);
+                    setTimeout(() => {
+                        setDeletedTaskNotif(false);
+                    }, 2000);
+                }
+            }, 3000);
+            
+        } catch (error) {
+            console.log('Failed to try delete task', error);
+        }
+    }
+
     useEffect(() => {
         fetchImportantTasks();
     }, []);
 
     return(
         <>
+            {deletedTaskNotif && (
+                <div className="fixed top-4 right-4 bg-red-800 text-white px-4 py-2 rounded shadow-lg animate-fade-in-out z-50">
+                    Task deleted successfully!
+                </div>
+            )}
+            {showUndoMessage && (
+                <div className="fixed top-4 right-4 bg-yellow-600 text-white px-4 py-2 rounded shadow-lg animate-fade-in-out z-50">
+                    <button onClick={() => {setUndoDelete(true); undoDeleteRef.current = true; setShowUndoMessage(false);}} className="border-2 w-20 h-8 mr-3 rounded-lg cursor-pointer">Undo</button>
+                    Task will be deleted!
+                </div>
+            )}
             {showAlertSuccess && (
                 <div className="absolute top-4 right-4 bg-green-800 text-white px-4 py-2 rounded shadow-lg animate-fade-in-out z-50">
                     Task added successfully!
@@ -123,6 +164,10 @@ function ImportantTasks(){
                                 </div>
                             </div>
                             <div className="w-5/6 flex flex-col gap-2 border-b-2 pb-7 border-my-back">
+                                <div onClick={() => {navigate('/home');}} className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
+                                    <img className="w-6" src="/home.png" alt="alltasks" />
+                                    <h3 className="font-roboto font-base text-my-back">Home</h3>
+                                </div>
                                 <div onClick={() => {setShowUserMenu(false); setShowNewTaskDialog(true)}} className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
                                     <img className="w-6" src="/addtask.png" alt="alltasks" />
                                     <h3 className="font-roboto font-base text-my-back">Add new task</h3>
@@ -131,7 +176,7 @@ function ImportantTasks(){
                                     <img className="w-6" src="/alltasks.png" alt="alltasks" />
                                     <h3 className="font-roboto font-base text-my-back">All tasks</h3>
                                 </div>
-                                <div onClick={() => {navigate('/tasks/important'); setShowNewTaskDialog(false)}} className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
+                                <div onClick={() => {navigate('/tasks/important')}} className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
                                     <img className="w-6" src="/importanttasks.png" alt="alltasks" />
                                     <h3 className="font-roboto font-base text-my-back">Important tasks</h3>
                                 </div>
@@ -148,7 +193,7 @@ function ImportantTasks(){
                                     <h3 className="font-roboto font-base text-my-back">Uncompleted tasks</h3>
                                 </div>
                             </div>
-                            <div className="w-full h-30 absolute bottom-0 flex justify-center items-center">
+                            <div className="w-full h-25 absolute bottom-0 flex justify-center items-center">
                                 <div onClick={() => {navigate('/signin')}} className="w-5/6 p-2 flex gap-2 justify-center items-center duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
                                     <img className="w-6" src="/logout.png" alt="logout" />
                                     <h1 className="font-roboto text-lg text-my-back">Sign out</h1>
@@ -182,7 +227,25 @@ function ImportantTasks(){
                         (importantTasks.map((task) => {
                             const showWarning = task.priority === 'high' || task.priority === 'very high';
                             return(
-                                <div key={task._id} className="relative shadow-lg p-4 m-2 border-2 border-my-blue3 rounded-2xl bg-my-light h-50 hover:scale-101 duration-200 ease-in-out cursor-pointer">
+                                <div key={task._id} className="relative group shadow-lg p-4 m-2 border-2 border-my-blue3 rounded-2xl bg-my-light h-50 hover:scale-101 duration-200 ease-in-out cursor-pointer">
+                                    
+                                    <div className="absolute inset-0 bg-gradient-to-t from-my-blue3 to-transparent flex items-end justify-center text-white text-lg font-roboto font-semibold  rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        <div className="w-full h-1/3 flex justify-baseline items-center gap-5 pl-5">
+                                            <div className="flex gap-1 justify-center items-center hover:scale-105 duration-200 ease-in-out">
+                                                <img className="w-5" src="/done.png" alt="check" />
+                                                <p className="font-roboto text-my-back font-normal text-sm hover:scale-103 duration-200 ease-in-out">Complete</p>
+                                            </div>
+                                            <div className="flex gap-1 justify-center items-center hover:scale-105 duration-200 ease-in-out">
+                                                <img className="w-5" src="/update.png" alt="check" />
+                                                <p className="font-roboto text-my-back font-normal text-sm ">Update</p>
+                                            </div>
+                                            <div onClick={() => tryDeleteTask(task._id)} className="flex gap-1 justify-center items-center hover:scale-105 duration-200 ease-in-out">
+                                                <img className="w-5" src="/bin.png" alt="check" />
+                                                <p className="font-roboto text-my-back font-normal text-sm ">Delete</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
                                     {showWarning && (
                                         <div className="absolute shadow-lg flex justify-center items-center w-20 h-8 top-3 right-3 bg-red-700 text-my-light rounded-lg font-roboto font-normal text-xs">
                                             {task.priority}
