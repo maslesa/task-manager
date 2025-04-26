@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function Tasks(){
+function ImportantTasks(){
 
     const token = localStorage.getItem('token');
     const axiosConfig = {
@@ -11,7 +11,6 @@ function Tasks(){
     const user = JSON.parse(localStorage.getItem('user'));
     const navigate = useNavigate();
 
-    const [tasks, setTasks] = useState([]);
     const [importantTasks, setImportantTasks] = useState([]);
     const [showAlertSuccess, setShowAlertSuccess] = useState(false);
     const [showAlertFailed, setShowAlertFailed] = useState(false);
@@ -22,11 +21,7 @@ function Tasks(){
         description: '',
         priority: 'medium'
     });
-    
-    const fetchTasks = async() => {
-        const res = await axios.get('http://localhost:3000/task/', axiosConfig);
-        setTasks(res.data.data);
-    }
+
     const fetchImportantTasks = async() => {
         const res = await axios.get('http://localhost:3000/task/important', axiosConfig);
         setImportantTasks(res.data.data);
@@ -35,7 +30,6 @@ function Tasks(){
         try {
             await axios.post('http://localhost:3000/task/post', newTask, axiosConfig);
             setShowAlertSuccess(true);
-            fetchTasks();
             fetchImportantTasks();
             setNewTask({ title: '', description: '', priority: 'medium' });
             setShowNewTaskDialog(false);
@@ -52,7 +46,6 @@ function Tasks(){
 
     useEffect(() => {
         fetchImportantTasks();
-        fetchTasks();
     }, []);
 
     return(
@@ -95,7 +88,7 @@ function Tasks(){
                                     </select>
                                 </div>
                                 <div className="w-full flex justify-center items-center mt-5">
-                                    <div onClick={addNewTask} className="w-50 h-10 bg-my-back border-2 border-my-back flex justify-center items-center gap-1 rounded-2xl cursor-pointer hover:scale-101 duration-200 ease-in-out">
+                                    <div onClick={() => {addNewTask()}} className="w-50 h-10 bg-my-back border-2 border-my-back flex justify-center items-center gap-1 rounded-2xl cursor-pointer hover:scale-101 duration-200 ease-in-out">
                                         <img className="w-5" src="/add.png" alt="plus" />
                                         <p className="font-roboto font-bold text-sm text-my-blue3">Add</p>
                                     </div>
@@ -130,10 +123,6 @@ function Tasks(){
                                 </div>
                             </div>
                             <div className="w-5/6 flex flex-col gap-2 border-b-2 pb-7 border-my-back">
-                                <div onClick={() => {navigate('/home'); setShowUserMenu(false)}} className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
-                                    <img className="w-6" src="/home.png" alt="alltasks" />
-                                    <h3 className="font-roboto font-base text-my-back">Home</h3>
-                                </div>
                                 <div onClick={() => {setShowUserMenu(false); setShowNewTaskDialog(true)}} className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
                                     <img className="w-6" src="/addtask.png" alt="alltasks" />
                                     <h3 className="font-roboto font-base text-my-back">Add new task</h3>
@@ -142,7 +131,7 @@ function Tasks(){
                                     <img className="w-6" src="/alltasks.png" alt="alltasks" />
                                     <h3 className="font-roboto font-base text-my-back">All tasks</h3>
                                 </div>
-                                <div onClick={() => {navigate('/tasks/important')}} className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
+                                <div onClick={() => {navigate('/tasks/important'); setShowNewTaskDialog(false)}} className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
                                     <img className="w-6" src="/importanttasks.png" alt="alltasks" />
                                     <h3 className="font-roboto font-base text-my-back">Important tasks</h3>
                                 </div>
@@ -159,7 +148,7 @@ function Tasks(){
                                     <h3 className="font-roboto font-base text-my-back">Uncompleted tasks</h3>
                                 </div>
                             </div>
-                            <div className="w-full h-25 absolute bottom-0 flex justify-center items-center">
+                            <div className="w-full h-30 absolute bottom-0 flex justify-center items-center">
                                 <div onClick={() => {navigate('/signin')}} className="w-5/6 p-2 flex gap-2 justify-center items-center duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
                                     <img className="w-6" src="/logout.png" alt="logout" />
                                     <h1 className="font-roboto text-lg text-my-back">Sign out</h1>
@@ -217,55 +206,10 @@ function Tasks(){
                         )}
                     </div>
                 </div>
-                {/* ALL TASKS */}
-                <div className="w-2/3 h-full flex flex-col mb-10">
-                    <div className="flex items-center justify-between mb-5">
-                        <div className="flex gap-1 justify-baseline items-center">
-                            <img className="w-8" src="/tasks.png" alt="tasks" />
-                            <h2 className="font-roboto font-black text-3xl text-my-blue3">All tasks</h2>
-                        </div>
-                        <div className="flex gap-3">
-                            <div onClick={() => setShowNewTaskDialog(true)} className="flex justify-center items-center gap-1 cursor-pointer hover:scale-101 duration-200 ease-in-out">
-                                <img className="w-5" src="/add.png" alt="plus" />
-                                <p className="font-roboto font-bold text-base text-my-blue3">Add new</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="w-full grid grid-cols-3">
-                        {tasks && tasks.length > 0 ? 
-                        (tasks.map((task) => {
-                            const showWarning = task.priority === 'high' || task.priority === 'very high';
-                            return(
-                                <div key={task._id} className="relative shadow-lg p-4 m-2 border-2 border-my-blue3 rounded-2xl bg-my-light h-50 hover:scale-101 duration-200 ease-in-out cursor-pointer">
-                                    {showWarning && (
-                                        <div className="absolute shadow-lg flex justify-center items-center w-20 h-8 top-3 right-3 bg-red-700 text-my-light rounded-lg font-roboto font-normal text-xs">
-                                            {task.priority}
-                                        </div>
-                                    )}
-                                    <h3 className="font-robot font-bold text-2xl text-my-blue3 max-w-2/3">{task.title}</h3>
-                                    <p className="font-robot font-normal text-md text-my-blue3 mb-3 text-justify">{task.description}</p>
-                                    <p className="text-sm text-gray-500 mb-3">Priority: {task.priority}</p>
-                                    <div className="flex items-center">
-                                        <p className="text-sm text-gray-500 mr-2">Status:</p>
-                                        <div className="w-3 h-3 bg-red-700 mr-1 rounded-2xl"></div>
-                                        <p className="text-sm text-gray-500">{task.status}</p>
-                                    </div>
-                                </div>
-                            );
-                        })) : (
-                            <div className="pl-10 font-roboto font-semibold text-2xl text-my-blue350">
-                                No tasks found.
-                            </div>
-                        )}
-                    </div>
-                </div>
-                {/* FOOTER */}
-                <div className="max-w-screen w-2/3 h-[120px] flex justify-center items-center border-t-2 border-my-blue3 mt-5">
-                    <a target="_blank" href="https://www.maslesa.com">maslesa</a>
-                </div>
             </div>
         </>
-    );
+    )
+
 }
 
-export default Tasks;
+export default ImportantTasks;

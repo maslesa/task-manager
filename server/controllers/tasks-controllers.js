@@ -55,6 +55,36 @@ const fetchAllTasks = async(req, res) => {
     }
 }
 
+const fetchImportantTasks = async(req, res) => {
+    try {
+        const userId = req.userInfo.id;
+        const importantTasks = await Task.find({
+            uploadedBy: userId,
+            priority: { $in : ['high', 'very high'] }
+        });
+
+        if(importantTasks.length > 0){
+            res.status(200).json({
+                success: true,
+                message: 'Important tasks found successfully',
+                data: importantTasks
+            })
+        }else{
+            res.status(200).json({
+                success: true,
+                message: 'No important tasks found',
+            })
+        }
+
+    } catch (error) {
+        console.log('Something went wrong');
+        res.status(500).json({
+            success: false,
+            message: 'something went wrong'
+        })
+    }
+}
+
 const fetchTask = async(req, res) => {
     try {
         const taskId = req.params.id;
@@ -137,6 +167,7 @@ const deleteTask = async(req, res) => {
 module.exports = {
     postTask,
     fetchAllTasks,
+    fetchImportantTasks,
     fetchTask,
     updateTask,
     deleteTask
