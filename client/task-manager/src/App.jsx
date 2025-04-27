@@ -1,13 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import WelcomePage from "./WelcomePage";
-import RegistrationPage from "./RegisterPage";
-import LoginPage from "./LoginPage";
-import Tasks from "./Tasks";
-import AllTasks from "./AllTasks";
-import ImportantTasks from "./ImportantTasks";
-import AccountSettings from "./AccountSettings";
-import ChangePassword from "./ChangePassword";
-import CompletedTasks from "./CompletedTasks";
+import WelcomePage from "./auth-pages/WelcomePage";
+import RegistrationPage from "./auth-pages/RegisterPage";
+import LoginPage from "./auth-pages/LoginPage";
+import Tasks from "./task-pages/Tasks";
+import AllTasks from "./task-pages/AllTasks";
+import ImportantTasks from "./task-pages/ImportantTasks";
+import AccountSettings from "./account-pages/AccountSettings";
+import ChangePassword from "./account-pages/ChangePassword";
+import CompletedTasks from "./task-pages/CompletedTasks";
 
 function App() {
 
