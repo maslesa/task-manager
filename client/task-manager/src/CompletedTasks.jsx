@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
-function ChangePassword(){
+function CompletedTasks(){
 
     const token = localStorage.getItem('token');
     const axiosConfig = {
@@ -13,25 +13,26 @@ function ChangePassword(){
 
     const [showAlertSuccess, setShowAlertSuccess] = useState(false);
     const [showAlertFailed, setShowAlertFailed] = useState(false);
-    const [showAlertSuccessPass, setShowAlertSuccessPass] = useState(false);
-    const [showAlertFailedPass, setShowAlertFailedPass] = useState(false);
-    const [showAlertFailedPassMatch, setShowAlertFailedPassMatch] = useState(false);
     const [showUserMenu, setShowUserMenu] = useState(false);
     const [showNewTaskDialog, setShowNewTaskDialog] = useState(false);
+    const [showUndoMessage, setShowUndoMessage] = useState(false);
+    const [undoDelete, setUndoDelete] = useState(false);
+    const [deletedTaskNotif, setDeletedTaskNotif] = useState(false);
+    const [showTaskCompleted, setShowTaskCompleted] = useState(false);
+    const undoDeleteRef = useRef(false);
     const [newTask, setNewTask] = useState({
         title: '',
         description: '',
         priority: 'medium'
     });
-    const [newPass, setNewPass] = useState({
-        oldPassword: '',
-        newPassword: '',
-        confirmNewPassword: ''
-    });
+    const [completedTasks, setCompletedTasks] = useState([]);
+    
+
     const addNewTask = async() => {
         try {
             await axios.post('http://localhost:3000/task/post', newTask, axiosConfig);
             setShowAlertSuccess(true);
+
             setNewTask({ title: '', description: '', priority: 'medium' });
             setShowNewTaskDialog(false);
             setTimeout(() => {
@@ -45,47 +46,74 @@ function ChangePassword(){
         }
     }
 
-    const updatePassword = async() => {
+    async function completeUncompleteTask(taskId){
         try {
-            if(newPass.newPassword !== newPass.confirmNewPassword){
-                return(
-                    setShowAlertFailedPassMatch(true),
-                    setTimeout(() => {
-                        setShowAlertFailedPassMatch(false);
-                    }, 2000)
-                )
-            }            
-            await axios.put('http://localhost:3000/account/update-password', newPass, axiosConfig);
-            setShowAlertSuccessPass(true),
+            await axios.put(`http://localhost:3000/task/set-completed/${taskId}`, {}, axiosConfig);
+            setShowTaskCompleted(true),
+            fetchCompletedTasks();
             setTimeout(() => {
-                setShowAlertSuccessPass(false);
-            }, 2000)            
-
-            setNewPass({oldPassword: '', newPassword: '', confirmNewPassword: ''});
-
+                setShowTaskCompleted(false);
+            }, 2000);
         } catch (error) {
-            setShowAlertFailedPass(true),
-            setTimeout(() => {
-                setShowAlertFailedPass(false);
-            }, 2000)  
+            console.log('Failed to complete task', error);
         }
     }
 
+    const fetchCompletedTasks = async() => {
+        try {
+            const res = await axios.get('http://localhost:3000/task/completed', axiosConfig);
+            setCompletedTasks(res.data.data);
+        } catch (error) {
+            console.log('failed to fetch completed tasks');
+        }
+    }
+
+    async function deleteTask(taskId){
+        await axios.delete(`http://localhost:3000/task/delete/${taskId}`, axiosConfig);
+        fetchCompletedTasks();
+    }
+
+    async function tryDeleteTask(taskId){
+        try {
+            setShowUndoMessage(true);            
+            setUndoDelete(false);
+            undoDeleteRef.current = false;
+            setTimeout(async() => {
+                setShowUndoMessage(false);
+                if(!undoDeleteRef.current){
+                    await deleteTask(taskId);
+                    setDeletedTaskNotif(true);
+                    setTimeout(() => {
+                        setDeletedTaskNotif(false);
+                    }, 2000);
+                }
+            }, 3000);
+            
+        } catch (error) {
+            console.log('Failed to try delete task', error);
+        }
+    }
+
+    useEffect(() => {
+        fetchCompletedTasks();
+    }, []);
+
     return(
-        <>  
-            {showAlertSuccessPass && (
+        <>
+            {showTaskCompleted && (
                 <div className="fixed top-4 right-4 bg-green-800 text-white px-4 py-2 rounded shadow-lg animate-fade-in-out z-50">
-                    Password updated successfully!
+                    Task updated successfully!
                 </div>
             )}
-            {showAlertFailedPassMatch && (
+            {deletedTaskNotif && (
                 <div className="fixed top-4 right-4 bg-red-800 text-white px-4 py-2 rounded shadow-lg animate-fade-in-out z-50">
-                    New passwords don't match!
+                    Task deleted successfully!
                 </div>
             )}
-            {showAlertFailedPass && (
-                <div className="fixed top-4 right-4 bg-red-800 text-white px-4 py-2 rounded shadow-lg animate-fade-in-out z-50">
-                    Old password is incorrect!
+            {showUndoMessage && (
+                <div className="fixed top-4 right-4 bg-yellow-600 text-white px-4 py-2 rounded shadow-lg animate-fade-in-out z-50">
+                    <button onClick={() => {setUndoDelete(true); undoDeleteRef.current = true; setShowUndoMessage(false);}} className="border-2 w-20 h-8 mr-3 rounded-lg cursor-pointer">Undo</button>
+                    Task will be deleted!
                 </div>
             )}
             {showAlertSuccess && (
@@ -98,8 +126,9 @@ function ChangePassword(){
                     Error adding new task!
                 </div>
             )}
-            {/* USER MENU */}
-            {showUserMenu && (
+            <div className="max-w-screen min-h-screen h-full bg-my-back flex flex-col justify-baseline items-center relative">
+                {/* USER MENU */}
+                {showUserMenu && (
                     <div className="fixed inset-0 bg-my-back50 flex justify-end items-center z-40" onClick={() => setShowUserMenu(false)}>
                         <div className={`w-[400px] h-screen bg-my-blue3 flex flex-col justify-baseline items-center shadow-2xl z-50 pt-15 relative transition-transform duration-500 ease-in-out ${showUserMenu ? "translate-x-0" : "translate-x-full"} `} onClick={(e) => e.stopPropagation()}>
                             <div className="flex gap-5 mb-5 border-b-2 pb-7 border-my-back w-5/6">
@@ -114,11 +143,11 @@ function ChangePassword(){
                                 </div>
                             </div>
                             <div className="w-5/6 flex flex-col gap-2 border-b-2 pb-7 border-my-back mb-5">
-                                <div onClick={() => {navigate('/account/settings');}} className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
+                                <div onClick={() => {navigate('/account/settings')}} className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
                                     <img className="w-6" src="/user.png" alt="acc" />
                                     <h3 className="font-roboto font-base text-my-back">Account settings</h3>
                                 </div>
-                                <div onClick={() => {navigate('/account/password'); setShowUserMenu(false)}} className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
+                                <div onClick={() => {navigate('/account/password');}} className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
                                     <img className="w-6" src="/password.png" alt="alltasks" />
                                     <h3 className="font-roboto font-base text-my-back">Change password</h3>
                                 </div>
@@ -144,7 +173,7 @@ function ChangePassword(){
                                     <img className="w-6" src="/today.png" alt="alltasks" />
                                     <h3 className="font-roboto font-base text-my-back">Today tasks</h3>
                                 </div>
-                                <div onClick={() => {navigate('/tasks/completed')}} className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
+                                <div onClick={() => {navigate('/tasks/completed'); setShowUserMenu(false);}} className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
                                     <img className="w-6" src="/done.png" alt="alltasks" />
                                     <h3 className="font-roboto font-base text-my-back">Completed tasks</h3>
                                 </div>
@@ -161,8 +190,7 @@ function ChangePassword(){
                             </div>
                         </div>
                     </div>
-            )}
-            <div className="max-w-screen min-h-screen h-full bg-my-back flex flex-col justify-baseline items-center relative">
+                )}
                 {/* ADD NEW TASK */}
                 {showNewTaskDialog && (
                     <div className="fixed inset-0 bg-my-back50 flex justify-center items-center z-40" onClick={() => setShowNewTaskDialog(false)}>
@@ -211,30 +239,70 @@ function ChangePassword(){
                         </div>
                     </div>
                 </div>
-                {/* CONTENT */}
-                <div className="w-full h-full flex flex-col justify-center items-center">
-                    <div className="w-4/6 h-[480px] flex flex-col justify-baseline items-center">
-                        <div className="w-full h-1/5 flex gap-2 justify-center items-center font-roboto font-bold text-3xl text-my-blue3 mb-15">
-                            <img className="w-8" src="/padlock.png" alt="key" />
-                            Change password
+                {/* COMPLETED TASKS */}
+                <div className="w-2/3 h-full flex flex-col mb-10">
+                    <div className="flex items-center justify-between mb-5">
+                        <div className="flex gap-1 justify-baseline items-center">
+                            <img className="w-8" src="/accept.png" alt="tasks" />
+                            <h2 className="font-roboto font-black text-3xl text-my-blue3">Completed tasks</h2>
                         </div>
-                        <div className="w-5/6 h-full flex flex-col gap-5 items-center justify-center">
-                            <div className="w-1/2 font-roboto font-bold text-xl text-my-blue3 flex flex-col gap-2 items-baseline justify-center">
-                                <label className="cursor-pointer" htmlFor="oldpass">Old password:</label>
-                                <input minLength={8} value={newPass.oldPassword} onChange={(e) => setNewPass({...newPass, oldPassword: e.target.value})} className="border-2 outline-0 w-full p-1 pl-3 rounded-lg" type="password" id="oldpass" />
+                    </div>
+                    <div className="grid grid-cols-3">
+                        {completedTasks && completedTasks.length > 0 ? 
+                        (completedTasks.map((task) => {
+                            const showWarning = task.priority === 'high' || task.priority === 'very high';
+                            return(
+                                <div key={task._id} className="relative group shadow-lg p-4 m-2 border-2 border-my-blue3 rounded-2xl bg-my-light h-50 hover:scale-101 duration-200 ease-in-out cursor-pointer">
+                                    
+                                    <div className="absolute inset-0 bg-gradient-to-t from-my-blue3 to-transparent flex items-end justify-center text-white text-lg font-roboto font-semibold  rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        <div className="w-full h-1/3 flex justify-baseline items-center gap-5 pl-5">
+                                            {task.status !== 'completed' ? (
+                                                <div onClick={() => completeUncompleteTask(task._id)} className="flex gap-1 justify-center items-center hover:scale-105 duration-200 ease-in-out">
+                                                    <img className="w-5" src="/done.png" alt="check" />
+                                                    <p className="font-roboto text-my-back font-normal text-sm hover:scale-103 duration-200 ease-in-out">Complete</p>
+                                                </div>
+                                            ) : (
+                                                <div onClick={() => completeUncompleteTask(task._id)} className="flex gap-1 justify-center items-center hover:scale-105 duration-200 ease-in-out">
+                                                    <img className="w-5" src="/cancel.png" alt="check" />
+                                                    <p className="font-roboto text-my-back font-normal text-sm hover:scale-103 duration-200 ease-in-out">Uncomplete</p>
+                                                </div>
+                                            )}
+                                            <div className="flex gap-1 justify-center items-center hover:scale-105 duration-200 ease-in-out">
+                                                <img className="w-5" src="/update.png" alt="check" />
+                                                <p className="font-roboto text-my-back font-normal text-sm ">Update</p>
+                                            </div>
+                                            <div onClick={() => tryDeleteTask(task._id)} className="flex gap-1 justify-center items-center hover:scale-105 duration-200 ease-in-out">
+                                                <img className="w-5" src="/bin.png" alt="check" />
+                                                <p className="font-roboto text-my-back font-normal text-sm ">Delete</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    {showWarning && (
+                                        <div className="absolute shadow-lg flex justify-center items-center w-20 h-8 top-3 right-3 bg-red-700 text-my-light rounded-lg font-roboto font-normal text-xs">
+                                            {task.priority}
+                                        </div>
+                                    )}
+                                    <h3 className="font-robot font-bold text-2xl text-my-blue3 max-w-2/3">{task.title}</h3>
+                                    <p className="font-robot font-normal text-md text-my-blue3 mb-3 text-justify">{task.description}</p>
+                                    <p className="text-sm text-gray-500 mb-3">Priority: {task.priority}</p>
+                                    <div className="flex items-center">
+                                        <p className="text-sm text-gray-500 mr-2">Status:</p>
+                                        {task.status === 'completed' ? (
+                                            <div className="w-3 h-3 bg-green-600 mr-1 rounded-2xl"></div>
+                                        ): (
+                                            <div className="w-3 h-3 bg-red-700 mr-1 rounded-2xl"></div>
+                                        )}
+                                        <p className="text-sm text-gray-500">{task.status}</p>
+                                    </div>
+                                </div>
+                            );
+                        })
+                        ) : (
+                            <div className="pl-10 font-roboto font-semibold text-2xl text-my-blue350">
+                                No completed tasks found.
                             </div>
-                            <div className="w-1/2 font-roboto font-bold text-xl text-my-blue3 flex flex-col gap-2 items-baseline justify-center">
-                                <label className="cursor-pointer" htmlFor="newpass">New password:</label>
-                                <input minLength={8} value={newPass.newPassword} onChange={(e) => setNewPass({...newPass, newPassword: e.target.value})} className="border-2 outline-0 w-full p-1 pl-3 rounded-lg" type="password" id="newpass" />
-                            </div>
-                            <div className="w-1/2 font-roboto font-bold text-xl text-my-blue3 flex flex-col gap-2 items-baseline justify-center mb-5">
-                                <label className="cursor-pointer" htmlFor="confnewpass">Confirm new password:</label>
-                                <input minLength={8} value={newPass.confirmNewPassword} onChange={(e) => setNewPass({...newPass, confirmNewPassword: e.target.value})} className="border-2 outline-0 w-full p-1 pl-3 rounded-lg" type="password" id="confnewpass" />
-                            </div>
-                            <div onClick={updatePassword} className="flex justify-center items-center p-4 border-2 rounded-xl font-roboto font-bold text-my-blue3 cursor-pointer duration-300 ease-in-out hover:text-my-back hover:bg-my-blue3">
-                                Change password
-                            </div>
-                        </div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -243,4 +311,4 @@ function ChangePassword(){
 
 }
 
-export default ChangePassword;
+export default CompletedTasks;

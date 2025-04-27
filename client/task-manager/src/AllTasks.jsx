@@ -23,6 +23,7 @@ function AllTasks(){
     const [undoDelete, setUndoDelete] = useState(false);
     const [deletedTaskNotif, setDeletedTaskNotif] = useState(false);
     const undoDeleteRef = useRef(false);
+    const [showTaskCompleted, setShowTaskCompleted] = useState(false);
 
 
     const addNewTask = async() => {
@@ -75,12 +76,30 @@ function AllTasks(){
         }
     }
 
+    async function completeUncompleteTask(taskId){
+        try {
+            await axios.put(`http://localhost:3000/task/set-completed/${taskId}`, {}, axiosConfig);
+            setShowTaskCompleted(true),
+            fetchTasks();
+            setTimeout(() => {
+                setShowTaskCompleted(false);
+            }, 2000);
+        } catch (error) {
+            console.log('Failed to complete task', error);
+        }
+    }
+
     useEffect(() => {
         fetchTasks();
     }, []);
 
     return(
         <>
+            {showTaskCompleted && (
+                <div className="fixed top-4 right-4 bg-green-800 text-white px-4 py-2 rounded shadow-lg animate-fade-in-out z-50">
+                    Task updated successfully!
+                </div>
+            )}
             {deletedTaskNotif && (
                 <div className="fixed top-4 right-4 bg-red-800 text-white px-4 py-2 rounded shadow-lg animate-fade-in-out z-50">
                     Task deleted successfully!
@@ -185,7 +204,7 @@ function AllTasks(){
                                     <img className="w-6" src="/today.png" alt="alltasks" />
                                     <h3 className="font-roboto font-base text-my-back">Today tasks</h3>
                                 </div>
-                                <div className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
+                                <div onClick={() => {navigate('/tasks/completed')}} className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
                                     <img className="w-6" src="/done.png" alt="alltasks" />
                                     <h3 className="font-roboto font-base text-my-back">Completed tasks</h3>
                                 </div>
@@ -232,10 +251,17 @@ function AllTasks(){
                                     
                                     <div className="absolute inset-0 bg-gradient-to-t from-my-blue3 to-transparent flex items-end justify-center text-white text-lg font-roboto font-semibold  rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                         <div className="w-full h-1/3 flex justify-baseline items-center gap-5 pl-5">
-                                            <div className="flex gap-1 justify-center items-center hover:scale-105 duration-200 ease-in-out">
-                                                <img className="w-5" src="/done.png" alt="check" />
-                                                <p className="font-roboto text-my-back font-normal text-sm hover:scale-103 duration-200 ease-in-out">Complete</p>
-                                            </div>
+                                            {task.status !== 'completed' ? (
+                                                <div onClick={() => completeUncompleteTask(task._id)} className="flex gap-1 justify-center items-center hover:scale-105 duration-200 ease-in-out">
+                                                    <img className="w-5" src="/done.png" alt="check" />
+                                                    <p className="font-roboto text-my-back font-normal text-sm hover:scale-103 duration-200 ease-in-out">Complete</p>
+                                                </div>
+                                            ) : (
+                                                <div onClick={() => completeUncompleteTask(task._id)} className="flex gap-1 justify-center items-center hover:scale-105 duration-200 ease-in-out">
+                                                    <img className="w-5" src="/cancel.png" alt="check" />
+                                                    <p className="font-roboto text-my-back font-normal text-sm hover:scale-103 duration-200 ease-in-out">Uncomplete</p>
+                                                </div>
+                                            )}
                                             <div className="flex gap-1 justify-center items-center hover:scale-105 duration-200 ease-in-out">
                                                 <img className="w-5" src="/update.png" alt="check" />
                                                 <p className="font-roboto text-my-back font-normal text-sm ">Update</p>
@@ -257,7 +283,11 @@ function AllTasks(){
                                     <p className="text-sm text-gray-500 mb-3">Priority: {task.priority}</p>
                                     <div className="flex items-center">
                                         <p className="text-sm text-gray-500 mr-2">Status:</p>
-                                        <div className="w-3 h-3 bg-red-700 mr-1 rounded-2xl"></div>
+                                        {task.status === 'completed' ? (
+                                            <div className="w-3 h-3 bg-green-600 mr-1 rounded-2xl"></div>
+                                        ): (
+                                            <div className="w-3 h-3 bg-red-700 mr-1 rounded-2xl"></div>
+                                        )}
                                         <p className="text-sm text-gray-500">{task.status}</p>
                                     </div>
                                 </div>

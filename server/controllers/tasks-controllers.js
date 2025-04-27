@@ -156,10 +156,77 @@ const deleteTask = async(req, res) => {
             })
         }
     } catch (error) {
-        console.log('Something went wrong');
         res.status(500).json({
             success: false,
             message: 'something went wrong'
+        })
+    }
+}
+
+const completeTask = async(req, res) => {
+    try {
+        const taskId = req.params.id;
+        const task = await Task.findById(taskId);
+
+        if(!task){
+            return res.status(404).json({
+                success: false,
+                message: 'task with that id not found'
+            })
+        }
+
+        let status = 'uncompleted';
+        if(task.status === 'uncompleted'){
+            status = 'completed';
+        }
+        const updatedTask = await Task.findByIdAndUpdate(
+            taskId,
+            {status : status},
+            {new : true}
+        )
+        if(!updatedTask){
+            return res.status(404).json({
+                success: false,
+                message: 'task with that id not found'
+            })
+        }
+        res.status(200).json({
+            success: true,
+            message: 'Task status setted to COMPLETED',
+            data: updatedTask
+        })
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'something went wrong'
+        })
+    }
+}
+
+const fetchCompletedTasks = async(req, res) => {
+    try {
+        const userId = req.userInfo.id;
+        const completedTasks = await Task.find({
+            uploadedBy: userId,
+            status: 'completed'
+        });
+        
+        if(completedTasks.length === 0){
+            return res.status(200).json({
+                success: true,
+                message: '0 completed tasks found',
+                data: []
+            })
+        }
+        res.status(200).json({
+            success: true,
+            message: 'completed tasks found',
+            data: completedTasks
+        })
+    } catch (error) {        
+        res.status(500).json({
+            success: false,
+            message: 'something went wrong',
         })
     }
 }
@@ -170,5 +237,7 @@ module.exports = {
     fetchImportantTasks,
     fetchTask,
     updateTask,
-    deleteTask
+    deleteTask,
+    completeTask,
+    fetchCompletedTasks
 }
