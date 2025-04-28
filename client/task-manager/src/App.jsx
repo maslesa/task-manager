@@ -8,6 +8,7 @@ import ImportantTasks from "./task-pages/ImportantTasks";
 import AccountSettings from "./account-pages/AccountSettings";
 import ChangePassword from "./account-pages/ChangePassword";
 import CompletedTasks from "./task-pages/CompletedTasks";
+import NewTask from "./task-pages/NewTask";
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
         <Route path="/signin" element={<LoginPage />}></Route>
         <Route path="/home" element={<Tasks />}></Route>
         <Route path="/tasks" element={<AllTasks />}></Route>
+        <Route path="/tasks/add" element={<NewTask />}></Route>
         <Route path="/tasks/important" element={<ImportantTasks />}></Route>
         <Route path="/tasks/completed" element={<CompletedTasks />}></Route>
         <Route path="/account/settings" element={<AccountSettings />}></Route>

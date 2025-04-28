@@ -44,7 +44,7 @@ function UserMenu({ showUserMenu, setShowUserMenu }) {
                                 <img className="w-6" src="/home.png" alt="alltasks" />
                                 <h3 className="font-roboto font-base text-my-back">Home</h3>
                             </div>
-                            <div onClick={() => { setShowUserMenu(false); setShowNewTaskDialog(true) }} className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
+                            <div onClick={() => { navigate ('/tasks/add')}} className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
                                 <img className="w-6" src="/addtask.png" alt="alltasks" />
                                 <h3 className="font-roboto font-base text-my-back">Add new task</h3>
                             </div>
