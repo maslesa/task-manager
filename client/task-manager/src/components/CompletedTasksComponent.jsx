@@ -34,6 +34,7 @@ function CompletedTasksComponent(){
             setShowTaskCompleted(true),
             fetchTasks();
             fetchImportantTasks();
+            fetchCompletedTasks();
             setTimeout(() => {
                 setShowTaskCompleted(false);
             }, 2000);
@@ -45,6 +46,7 @@ function CompletedTasksComponent(){
         await axios.delete(`http://localhost:3000/task/delete/${taskId}`, axiosConfig);
         fetchTasks();
         fetchImportantTasks();
+        fetchCompletedTasks();
     }
     async function tryDeleteTask(taskId){
         try {
@@ -146,6 +148,13 @@ function CompletedTasksComponent(){
                                         </div>
                                     )}
                                     <h3 className="font-robot font-bold text-2xl text-my-blue3 max-w-2/3">{task.title}</h3>
+                                    <div className="text-sm text-gray-500 mb-3 flex gap-1">{task.deadline && (
+                                        <div>Deadline: {new Date(task.deadline).toLocaleDateString('en-US', {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric',
+                                          })}</div>
+                                    )}</div>
                                     <p className="font-robot font-normal text-md text-my-blue3 mb-3 text-justify">{task.description}</p>
                                     <p className="text-sm text-gray-500 mb-3">Priority: {task.priority}</p>
                                     <div className="flex items-center">

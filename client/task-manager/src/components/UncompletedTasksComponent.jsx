@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
- 
-function ImportantTasksComponent(){
+
+function UncompletedTasksComponent(){
 
     const token = localStorage.getItem('token');
     const axiosConfig = { headers: { Authorization : `Bearer ${token}` }}
@@ -14,6 +14,8 @@ function ImportantTasksComponent(){
     const [showAlertFailed, setShowAlertFailed] = useState(false);
     const [undoDelete, setUndoDelete] = useState(false);
     const undoDeleteRef = useRef(false);
+    const [completedTasks, setCompletedTasks] = useState([]);
+    const [uncompletedTasks, setUncompletedTasks] = useState([]);
 
     const fetchTasks = async() => {
         const res = await axios.get('http://localhost:3000/task/', axiosConfig);
@@ -23,12 +25,23 @@ function ImportantTasksComponent(){
         const res = await axios.get('http://localhost:3000/task/important', axiosConfig);
         setImportantTasks(res.data.data);
     }
+    const fetchCompletedTasks = async() => {
+        const res = await axios.get('http://localhost:3000/task/completed', axiosConfig);
+        setCompletedTasks(res.data.data);
+    }
+    const fetchUncompletedTasks = async() => {
+        const res = await axios.get('http://localhost:3000/task/uncompleted', axiosConfig);
+        console.log(res.data);
+        setUncompletedTasks(res.data.tasks);
+    }
     async function completeUncompleteTask(taskId){
         try {
             await axios.put(`http://localhost:3000/task/set-completed/${taskId}`, {}, axiosConfig);
             setShowTaskCompleted(true),
             fetchTasks();
             fetchImportantTasks();
+            fetchCompletedTasks();
+            fetchUncompletedTasks();
             setTimeout(() => {
                 setShowTaskCompleted(false);
             }, 2000);
@@ -40,6 +53,8 @@ function ImportantTasksComponent(){
         await axios.delete(`http://localhost:3000/task/delete/${taskId}`, axiosConfig);
         fetchTasks();
         fetchImportantTasks();
+        fetchCompletedTasks();
+        fetchUncompletedTasks();
     }
     async function tryDeleteTask(taskId){
         try {
@@ -65,6 +80,8 @@ function ImportantTasksComponent(){
     useEffect(() => {
         fetchTasks();
         fetchImportantTasks();
+        fetchCompletedTasks();
+        fetchUncompletedTasks();
     }, []);
 
     return(
@@ -95,17 +112,17 @@ function ImportantTasksComponent(){
                     Error adding new task!
                 </div>
             )}
-            {/* IMPORTANT TASKS CONTENT */}
+            {/* COMPLETED TASKS */}
             <div className="w-2/3 h-full flex flex-col mb-10">
                     <div className="flex items-center justify-between mb-5">
                         <div className="flex gap-1 justify-baseline items-center">
-                            <img className="w-8" src="/warning.png" alt="tasks" />
-                            <h2 className="font-roboto font-black text-3xl text-my-blue3">Important tasks</h2>
+                            <img className="w-8" src="/uncompleted.png" alt="tasks" />
+                            <h2 className="font-roboto font-black text-3xl text-my-blue3">Uncompleted tasks</h2>
                         </div>
                     </div>
                     <div className="grid grid-cols-3">
-                        {importantTasks && importantTasks.length > 0 ? 
-                        (importantTasks.map((task) => {
+                        {uncompletedTasks && uncompletedTasks.length > 0 ? 
+                        (uncompletedTasks.map((task) => {
                             const showWarning = task.priority === 'high' || task.priority === 'very high';
                             return(
                                 <div key={task._id} className="relative group shadow-lg p-4 m-2 border-2 border-my-blue3 rounded-2xl bg-my-light h-50 hover:scale-101 duration-200 ease-in-out cursor-pointer">
@@ -139,7 +156,7 @@ function ImportantTasksComponent(){
                                             {task.priority}
                                         </div>
                                     )}
-                                    <h3 className="font-robot font-bold text-2xl text-my-blue3 max-w-2/3 mb-1">{task.title}</h3>
+                                    <h3 className="font-robot font-bold text-2xl text-my-blue3 max-w-2/3">{task.title}</h3>
                                     <div className="text-sm text-gray-500 mb-3 flex gap-1">{task.deadline && (
                                         <div>Deadline: {new Date(task.deadline).toLocaleDateString('en-US', {
                                             year: 'numeric',
@@ -163,7 +180,7 @@ function ImportantTasksComponent(){
                         })
                         ) : (
                             <div className="pl-10 font-roboto font-semibold text-2xl text-my-blue350">
-                                No important tasks found.
+                                No uncompleted tasks found.
                             </div>
                         )}
                     </div>
@@ -173,4 +190,4 @@ function ImportantTasksComponent(){
 
 }
 
-export default ImportantTasksComponent;
+export default UncompletedTasksComponent;

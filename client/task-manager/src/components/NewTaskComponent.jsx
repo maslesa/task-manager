@@ -90,7 +90,7 @@ function NewTaskComponent() {
                         <label className="font-roboto font-bold text-2xl text-my-blue3 mb-1 cursor-pointer" htmlFor="deadline">Deadline:</label>
                         <div className='w-full block'>
                             <DatePicker id="deadline" selected={startDate} onChange={(date) => {setStartDate(date); setNewTask(prev => ({ ...prev, deadline: date }))}} placeholderText="Select a deadline" 
-                                minDate={new Date()} dateFormat="yyyy-MM-dd"
+                                minDate={new Date()} dateFormat="yyyy-MM-dd" autoComplete='off'
                                 customInput={<input className="outline-0 border-2 px-4 py-2 rounded-lg border-my-blue3 font-roboto font-bold text-my-blue3"/>}/>
                         </div>
                     </div>

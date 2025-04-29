@@ -231,6 +231,39 @@ const fetchCompletedTasks = async(req, res) => {
     }
 }
 
+const fetchUncompletedTasks = async(req, res) => {
+    try {
+        const userId = req.userInfo.id;
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const uncompletedTasks = await Task.find({
+            status: 'uncompleted',
+            uploadedBy: userId,
+            deadline: { $lt: today }
+        });
+
+        if(uncompletedTasks.length === 0){
+            res.status(200).json({
+                success: true,
+                message: 'there is no uncompleted tasks',
+                tasks: uncompletedTasks
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'uncompleted tasks found successfully',
+            tasks: uncompletedTasks
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'something went wrong',
+        })
+    }
+}
+
 module.exports = {
     postTask,
     fetchAllTasks,
@@ -239,5 +272,6 @@ module.exports = {
     updateTask,
     deleteTask,
     completeTask,
-    fetchCompletedTasks
+    fetchCompletedTasks,
+    fetchUncompletedTasks
 }

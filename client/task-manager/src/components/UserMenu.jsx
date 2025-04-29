@@ -64,7 +64,7 @@ function UserMenu({ showUserMenu, setShowUserMenu }) {
                                 <img className="w-6" src="/done.png" alt="alltasks" />
                                 <h3 className="font-roboto font-base text-my-back">Completed tasks</h3>
                             </div>
-                            <div className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
+                            <div onClick={() => { navigate('/tasks/uncompleted') }} className="flex gap-2 p-2 pl-5 duration-200 ease-in-out rounded-lg hover:bg-my-back-low cursor-pointer">
                                 <img className="w-6" src="/cancel.png" alt="alltasks" />
                                 <h3 className="font-roboto font-base text-my-back">Uncompleted tasks</h3>
                             </div>
