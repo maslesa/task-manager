@@ -1,17 +1,17 @@
 import Header from "../components/Header";
-import ChangePasswordComponent from "../components/ChangePasswordComponent";
+import TodayTasksComponent from "../components/TodayTasksComponent";
 
-function ChangePassword(){
+function TodayTasks(){
 
     return(
-        <>  
+        <>
             <div className="max-w-screen min-h-screen h-full bg-my-back flex flex-col justify-baseline items-center relative">
                 <Header />
-                <ChangePasswordComponent />
+                <TodayTasksComponent />
             </div>
         </>
     )
 
 }
 
-export default ChangePassword;
+export default TodayTasks;
