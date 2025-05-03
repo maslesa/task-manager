@@ -244,10 +244,9 @@ const fetchUncompletedTasks = async(req, res) => {
         });
 
         if(uncompletedTasks.length === 0){
-            res.status(200).json({
+            return res.status(200).json({
                 success: true,
                 message: 'there is no uncompleted tasks',
-                tasks: uncompletedTasks
             });
         }
 
@@ -270,23 +269,22 @@ const fetchTodayTasks = async(req, res) => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        const uncompletedTasks = await Task.find({
+        const todayTasks = await Task.find({
             uploadedBy: userId,
             deadline: { $eq: today }
         });
 
-        if(uncompletedTasks.length === 0){
-            res.status(200).json({
+        if(todayTasks.length === 0){
+            return res.status(200).json({
                 success: true,
                 message: 'there is no uncompleted tasks',
-                tasks: uncompletedTasks
             });
         }
 
         res.status(200).json({
             success: true,
             message: 'uncompleted tasks found successfully',
-            tasks: uncompletedTasks
+            tasks: todayTasks
         });
     } catch (error) {
         res.status(500).json({

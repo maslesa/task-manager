@@ -179,7 +179,7 @@ function UncompletedTasksComponent(){
                             );
                         })
                         ) : (
-                            <div className="pl-10 font-roboto font-semibold text-2xl text-my-blue350">
+                            <div className="col-span-3 pl-10 font-roboto font-semibold text-2xl text-my-blue350 w-full">
                                 No uncompleted tasks found.
                             </div>
                         )}

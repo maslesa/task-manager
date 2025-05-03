@@ -5,12 +5,12 @@ import LoginPage from "./auth-pages/LoginPage";
 import Tasks from "./task-pages/Tasks";
 import AllTasks from "./task-pages/AllTasks";
 import ImportantTasks from "./task-pages/ImportantTasks";
-import AccountSettings from "./account-pages/AccountSettings";
 import ChangePassword from "./account-pages/ChangePassword";
 import CompletedTasks from "./task-pages/CompletedTasks";
 import NewTask from "./task-pages/NewTask";
 import UncompletedTasks from "./task-pages/UncompletedTasks";
 import TodayTasks from "./task-pages/TodayTasks";
+import Account from "./account-pages/Account";
 
 function App() {
 
@@ -27,7 +27,7 @@ function App() {
         <Route path="/tasks/completed" element={<CompletedTasks />}></Route>
         <Route path="/tasks/today" element={<TodayTasks />}></Route>
         <Route path="/tasks/uncompleted" element={<UncompletedTasks />}></Route>
-        <Route path="/account/settings" element={<AccountSettings />}></Route>
+        <Route path="/account/settings" element={<Account />}></Route>
         <Route path="/account/password" element={<ChangePassword />}></Route>
       </Routes>
     </Router>

@@ -48,6 +48,42 @@ const updatePassword = async(req, res) => {
     }
 }
 
+const updateAccountSettings = async(req, res) => {
+    try {
+        const userId = req.userInfo.id;
+        const {newUsername} = req.body;
+
+        const userExists = await User.findOne({ username: newUsername });
+        if(userExists && userExists._id.toString() !== userId){
+            return res.status(400).json({
+                success: false,
+                message: 'User with that username or email already exists'
+            })
+        }
+
+        const updatedUsername = await User.findByIdAndUpdate(
+            userId,
+            {username: newUsername},
+            {new: true}
+        );
+
+        if(updatedUsername){            
+            res.status(200).json({
+                success: true,
+                message: 'username updated successfully',
+            });
+        }
+
+    } catch (error) {
+        console.log('Something went wrong');
+        res.status(500).json({
+            success: false,
+            message: 'something went wrong'
+        })
+    }
+}
+
 module.exports = {
     updatePassword,
+    updateAccountSettings
 }
