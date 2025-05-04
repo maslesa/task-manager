@@ -28,23 +28,6 @@ function ChangePasswordComponent(){
         newPassword: '',
         confirmNewPassword: ''
     });
-    const addNewTask = async() => {
-        try {
-            await axios.post('http://localhost:3000/task/post', newTask, axiosConfig);
-            setShowAlertSuccess(true);
-            setNewTask({ title: '', description: '', priority: 'medium' });
-            setShowNewTaskDialog(false);
-            setTimeout(() => {
-                setShowAlertSuccess(false);
-            }, 1000);
-        } catch (error) {
-            setShowAlertFailed(true);
-            setTimeout(() => {
-                setShowAlertFailed(false);
-            }, 2000);
-        }
-    }
-
     const updatePassword = async() => {
         try {
             if(newPass.newPassword !== newPass.confirmNewPassword){

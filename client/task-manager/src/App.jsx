@@ -11,6 +11,7 @@ import NewTask from "./task-pages/NewTask";
 import UncompletedTasks from "./task-pages/UncompletedTasks";
 import TodayTasks from "./task-pages/TodayTasks";
 import Account from "./account-pages/Account";
+import UpdateTask from "./task-pages/UpdateTask";
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
         <Route path="/home" element={<Tasks />}></Route>
         <Route path="/tasks" element={<AllTasks />}></Route>
         <Route path="/tasks/add" element={<NewTask />}></Route>
+        <Route path="/tasks/update" element={<UpdateTask />}></Route>
         <Route path="/tasks/important" element={<ImportantTasks />}></Route>
         <Route path="/tasks/completed" element={<CompletedTasks />}></Route>
         <Route path="/tasks/today" element={<TodayTasks />}></Route>

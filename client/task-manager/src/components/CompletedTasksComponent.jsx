@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 function CompletedTasksComponent(){
-
+    const navigate = useNavigate();
     const token = localStorage.getItem('token');
     const axiosConfig = { headers: { Authorization : `Bearer ${token}` }}
     const [tasks, setTasks] = useState([]);
@@ -131,7 +132,7 @@ function CompletedTasksComponent(){
                                                     <p className="font-roboto text-my-back font-normal text-sm hover:scale-103 duration-200 ease-in-out">Uncomplete</p>
                                                 </div>
                                             )}
-                                            <div className="flex gap-1 justify-center items-center hover:scale-105 duration-200 ease-in-out">
+                                            <div onClick={() => navigate("/tasks/update", { state: {task} })} className="flex gap-1 justify-center items-center hover:scale-105 duration-200 ease-in-out">
                                                 <img className="w-5" src="/update.png" alt="check" />
                                                 <p className="font-roboto text-my-back font-normal text-sm ">Update</p>
                                             </div>
