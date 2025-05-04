@@ -1,6 +1,6 @@
 import Header from "../components/Header";
-import ImportantTasks from "../components/ImportantTasks";
-import AllTasksComponent from "../components/AllTasksComponent";
+import HomeSlider from "../components/HomeSlider";
+import TodayTasksComponent from "../components/TodayTasksComponent"
 
 function Tasks(){
 
@@ -8,8 +8,8 @@ function Tasks(){
         <>
             <div className="max-w-screen min-h-screen h-full bg-my-back flex flex-col justify-baseline items-center relative">
                 <Header />
-                <ImportantTasks />
-                <AllTasksComponent />
+                <TodayTasksComponent />
+                <HomeSlider />
             </div>
         </>
     );
