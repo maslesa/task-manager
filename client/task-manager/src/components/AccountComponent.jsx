@@ -1,6 +1,5 @@
 import axios from "axios";
-import { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 function AccountComponent(){
 
@@ -9,19 +8,14 @@ function AccountComponent(){
         headers: { Authorization : `Bearer ${token}` }
     }
     const user = JSON.parse(localStorage.getItem('user'));
-    const navigate = useNavigate();
 
     const [showAlertSuccess, setShowAlertSuccess] = useState(false);
     const [showAlertFailed, setShowAlertFailed] = useState(false);
 
     const [newUsername, setNewUsername] = useState(user.username);
-
-    const [changingUsernameNav, setChangingUsernameNav] = useState(false);
-
     const [enabledChanging, setEnableChanging] = useState(false);
 
     async function updateUsername(newUsername){
-
         if(newUsername.length > 3){
             try {
                 const res = await axios.put('http://localhost:3000/account/update-account', { newUsername }, axiosConfig);

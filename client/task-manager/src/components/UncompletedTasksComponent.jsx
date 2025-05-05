@@ -7,30 +7,14 @@ function UncompletedTasksComponent(){
     const navigate = useNavigate();
     const token = localStorage.getItem('token');
     const axiosConfig = { headers: { Authorization : `Bearer ${token}` }}
-    const [tasks, setTasks] = useState([]);
-    const [importantTasks, setImportantTasks] = useState([]);
     const [showUndoMessage, setShowUndoMessage] = useState(false);
     const [showTaskCompleted, setShowTaskCompleted] = useState(false);
     const [deletedTaskNotif, setDeletedTaskNotif] = useState(false);
-    const [showAlertSuccess, setShowAlertSuccess] = useState(false);
-    const [showAlertFailed, setShowAlertFailed] = useState(false);
     const [undoDelete, setUndoDelete] = useState(false);
     const undoDeleteRef = useRef(false);
-    const [completedTasks, setCompletedTasks] = useState([]);
     const [uncompletedTasks, setUncompletedTasks] = useState([]);
 
-    const fetchTasks = async() => {
-        const res = await axios.get('http://localhost:3000/task/', axiosConfig);
-        setTasks(res.data.data);
-    }
-    const fetchImportantTasks = async() => {
-        const res = await axios.get('http://localhost:3000/task/important', axiosConfig);
-        setImportantTasks(res.data.data);
-    }
-    const fetchCompletedTasks = async() => {
-        const res = await axios.get('http://localhost:3000/task/completed', axiosConfig);
-        setCompletedTasks(res.data.data);
-    }
+
     const fetchUncompletedTasks = async() => {
         const res = await axios.get('http://localhost:3000/task/uncompleted', axiosConfig);
         console.log(res.data);
@@ -40,9 +24,6 @@ function UncompletedTasksComponent(){
         try {
             await axios.put(`http://localhost:3000/task/set-completed/${taskId}`, {}, axiosConfig);
             setShowTaskCompleted(true),
-            fetchTasks();
-            fetchImportantTasks();
-            fetchCompletedTasks();
             fetchUncompletedTasks();
             setTimeout(() => {
                 setShowTaskCompleted(false);
@@ -53,9 +34,6 @@ function UncompletedTasksComponent(){
     }
     async function deleteTask(taskId){
         await axios.delete(`http://localhost:3000/task/delete/${taskId}`, axiosConfig);
-        fetchTasks();
-        fetchImportantTasks();
-        fetchCompletedTasks();
         fetchUncompletedTasks();
     }
     async function tryDeleteTask(taskId){
@@ -80,9 +58,6 @@ function UncompletedTasksComponent(){
     }
 
     useEffect(() => {
-        fetchTasks();
-        fetchImportantTasks();
-        fetchCompletedTasks();
         fetchUncompletedTasks();
     }, []);
 
@@ -102,16 +77,6 @@ function UncompletedTasksComponent(){
                 <div className="fixed top-4 right-4 bg-yellow-600 text-white px-4 py-2 rounded shadow-lg animate-fade-in-out z-50">
                     <button onClick={() => {setUndoDelete(true); undoDeleteRef.current = true; setShowUndoMessage(false);}} className="border-2 w-20 h-8 mr-3 rounded-lg cursor-pointer">Undo</button>
                     Task will be deleted!
-                </div>
-            )}
-            {showAlertSuccess && (
-                <div className="fixed top-4 right-4 bg-green-800 text-white px-4 py-2 rounded shadow-lg animate-fade-in-out z-50">
-                    Task added successfully!
-                </div>
-            )}
-            {showAlertFailed && (
-                <div className="fixed top-4 right-4 bg-red-800 text-white px-4 py-2 rounded shadow-lg animate-fade-in-out z-50">
-                    Error adding new task!
                 </div>
             )}
             {/* COMPLETED TASKS */}

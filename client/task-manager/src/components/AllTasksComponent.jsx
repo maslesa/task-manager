@@ -8,12 +8,9 @@ function AllTasksComponent(){
     const token = localStorage.getItem('token');
     const axiosConfig = { headers: { Authorization : `Bearer ${token}` }}
     const [tasks, setTasks] = useState([]);
-    const [importantTasks, setImportantTasks] = useState([]);
     const [showUndoMessage, setShowUndoMessage] = useState(false);
     const [showTaskCompleted, setShowTaskCompleted] = useState(false);
     const [deletedTaskNotif, setDeletedTaskNotif] = useState(false);
-    const [showAlertSuccess, setShowAlertSuccess] = useState(false);
-    const [showAlertFailed, setShowAlertFailed] = useState(false);
     const [undoDelete, setUndoDelete] = useState(false);
     const undoDeleteRef = useRef(false);
 
@@ -21,16 +18,12 @@ function AllTasksComponent(){
         const res = await axios.get('http://localhost:3000/task/', axiosConfig);
         setTasks(res.data.data);
     }
-    const fetchImportantTasks = async() => {
-        const res = await axios.get('http://localhost:3000/task/important', axiosConfig);
-        setImportantTasks(res.data.data);
-    }
+    
     async function completeUncompleteTask(taskId){
         try {
             await axios.put(`http://localhost:3000/task/set-completed/${taskId}`, {}, axiosConfig);
             setShowTaskCompleted(true),
             fetchTasks();
-            fetchImportantTasks();
             setTimeout(() => {
                 setShowTaskCompleted(false);
             }, 2000);
@@ -41,7 +34,6 @@ function AllTasksComponent(){
     async function deleteTask(taskId){
         await axios.delete(`http://localhost:3000/task/delete/${taskId}`, axiosConfig);
         fetchTasks();
-        fetchImportantTasks();
     }
     async function tryDeleteTask(taskId){
         try {
@@ -66,7 +58,6 @@ function AllTasksComponent(){
 
     useEffect(() => {
         fetchTasks();
-        fetchImportantTasks();
     }, []);
 
     return(
@@ -85,16 +76,6 @@ function AllTasksComponent(){
                 <div className="fixed top-4 right-4 bg-yellow-600 text-white px-4 py-2 rounded shadow-lg animate-fade-in-out z-50">
                     <button onClick={() => {setUndoDelete(true); undoDeleteRef.current = true; setShowUndoMessage(false);}} className="border-2 w-20 h-8 mr-3 rounded-lg cursor-pointer">Undo</button>
                     Task will be deleted!
-                </div>
-            )}
-            {showAlertSuccess && (
-                <div className="fixed top-4 right-4 bg-green-800 text-white px-4 py-2 rounded shadow-lg animate-fade-in-out z-50">
-                    Task added successfully!
-                </div>
-            )}
-            {showAlertFailed && (
-                <div className="fixed top-4 right-4 bg-red-800 text-white px-4 py-2 rounded shadow-lg animate-fade-in-out z-50">
-                    Error adding new task!
                 </div>
             )}
             {/* ALL TASKS */}

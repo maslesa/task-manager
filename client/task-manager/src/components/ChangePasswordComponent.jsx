@@ -1,6 +1,5 @@
 import axios from "axios";
-import { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 function ChangePasswordComponent(){
 
@@ -8,26 +7,17 @@ function ChangePasswordComponent(){
     const axiosConfig = {
         headers: { Authorization : `Bearer ${token}` }
     }
-    const user = JSON.parse(localStorage.getItem('user'));
-    const navigate = useNavigate();
 
-    const [showAlertSuccess, setShowAlertSuccess] = useState(false);
-    const [showAlertFailed, setShowAlertFailed] = useState(false);
     const [showAlertSuccessPass, setShowAlertSuccessPass] = useState(false);
     const [showAlertFailedPass, setShowAlertFailedPass] = useState(false);
     const [showAlertFailedPassMatch, setShowAlertFailedPassMatch] = useState(false);
-    const [showUserMenu, setShowUserMenu] = useState(false);
-    const [showNewTaskDialog, setShowNewTaskDialog] = useState(false);
-    const [newTask, setNewTask] = useState({
-        title: '',
-        description: '',
-        priority: 'medium'
-    });
+
     const [newPass, setNewPass] = useState({
         oldPassword: '',
         newPassword: '',
         confirmNewPassword: ''
     });
+    
     const updatePassword = async() => {
         const isPasswordValid = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/.test(newPass.newPassword);
         try {
@@ -70,16 +60,6 @@ function ChangePasswordComponent(){
             {showAlertFailedPass && (
                 <div className="fixed top-4 right-4 bg-red-800 text-white px-4 py-2 rounded shadow-lg animate-fade-in-out z-50">
                     Old password is incorrect!
-                </div>
-            )}
-            {showAlertSuccess && (
-                <div className="fixed top-4 right-4 bg-green-800 text-white px-4 py-2 rounded shadow-lg animate-fade-in-out z-50">
-                    Task added successfully!
-                </div>
-            )}
-            {showAlertFailed && (
-                <div className="fixed top-4 right-4 bg-red-800 text-white px-4 py-2 rounded shadow-lg animate-fade-in-out z-50">
-                    Error adding new task!
                 </div>
             )}
             {/* CONTENT */}

@@ -1,19 +1,12 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import NewTaskDialog from "./NewTaskDialog";
 
 function UserMenu({ showUserMenu, setShowUserMenu }) {
 
     const user = JSON.parse(localStorage.getItem('user'));
     const navigate = useNavigate();
-    const [showNewTaskDialog, setShowNewTaskDialog] = useState(false);
 
     return (
         <>  
-            {/* NEW TASK DIALOG */}
-            {showNewTaskDialog && (
-                        <NewTaskDialog showNewTaskDialog={showNewTaskDialog} setShowNewTaskDialog={setShowNewTaskDialog} />
-            )}
             {/* USER MENU */}
             {showUserMenu && (
                 <div className="fixed inset-0 bg-my-back50 flex justify-end items-center z-40" onClick={() => setShowUserMenu(false)}>
