@@ -23,13 +23,21 @@ function NewTaskComponent() {
     });
     const addNewTask = async() => {
         try {
-            await axios.post('http://localhost:3000/task/post', newTask, axiosConfig);
-            console.log('added successfully');
-            setShowAlertSuccess(true);
-            setTimeout(() => {
-                setShowAlertSuccess(false);
-            }, 2000);
-            setNewTask({ title: '', description: '', priority: 'medium', deadline: null });
+            if(newTask.title.length > 3){
+                await axios.post('http://localhost:3000/task/post', newTask, axiosConfig);
+                console.log('added successfully');
+                setShowAlertSuccess(true);
+                setTimeout(() => {
+                    setShowAlertSuccess(false);
+                }, 2000);
+                setNewTask({ title: '', description: '', priority: 'medium', deadline: null });
+            }else{
+                setShowAlertFailed(true)
+                setTimeout(() => {
+                    setShowAlertFailed(false);
+                }, 2000);
+                console.log(error);
+            }
         } catch (error) {
             setShowAlertFailed(true)
             setTimeout(() => {
@@ -48,7 +56,7 @@ function NewTaskComponent() {
             )}
             {showAlertFailed && (
                 <div className="fixed top-4 right-4 bg-red-800 text-white px-4 py-2 rounded shadow-lg animate-fade-in-out z-50">
-                    Error adding new task!
+                    Error adding new task or invalid title format!
                 </div>
             )}
             <div className="w-2/3 h-[500px] flex flex-col justify-baseline items-center">
@@ -61,12 +69,12 @@ function NewTaskComponent() {
                 <div className="flex flex-col gap-5 w-1/2 h-full p-3 pt-10">
                     <div className="flex flex-col justify-center items-baseline">
                         <label className="font-roboto font-bold text-2xl text-my-blue3 mb-1 cursor-pointer" htmlFor="title">Title:</label>
-                        <input required maxLength={25} id="title" className="w-full outline-0 border-2 p-1 pl-3 rounded-lg border-my-blue3 font-roboto font-bold" type="text" 
+                        <input required minLength={3} maxLength={20} id="title" className="w-full outline-0 border-2 p-1 pl-3 rounded-lg border-my-blue3 font-roboto font-bold" type="text" 
                                 value={newTask.title} onChange={(e) => setNewTask({ ...newTask, title: e.target.value})}/>
                     </div>
                     <div className="flex flex-col justify-center items-baseline">
                         <label className="font-roboto font-bold text-2xl text-my-blue3 mb-1 cursor-pointer" htmlFor="desc">Description:</label>
-                        <textarea maxLength={70} className="resize-none w-full outline-0 border-2 p-1 pl-3 rounded-lg border-my-blue3 font-roboto font-bold" name="" id="desc"
+                        <textarea maxLength={50} className="resize-none w-full outline-0 border-2 p-1 pl-3 rounded-lg border-my-blue3 font-roboto font-bold" name="" id="desc"
                                     value={newTask.description} onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
                         ></textarea>
                     </div>

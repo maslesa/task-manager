@@ -29,8 +29,9 @@ function ChangePasswordComponent(){
         confirmNewPassword: ''
     });
     const updatePassword = async() => {
+        const isPasswordValid = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/.test(newPass.newPassword);
         try {
-            if(newPass.newPassword !== newPass.confirmNewPassword){
+            if(newPass.newPassword !== newPass.confirmNewPassword || !isPasswordValid){
                 return(
                     setShowAlertFailedPassMatch(true),
                     setTimeout(() => {
@@ -63,7 +64,7 @@ function ChangePasswordComponent(){
             )}
             {showAlertFailedPassMatch && (
                 <div className="fixed top-4 right-4 bg-red-800 text-white px-4 py-2 rounded shadow-lg animate-fade-in-out z-50">
-                    New passwords don't match!
+                    New passwords don't match or invalid new password form!
                 </div>
             )}
             {showAlertFailedPass && (

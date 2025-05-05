@@ -12,23 +12,33 @@ function RegistrationPage(){
 
     const [showAlertSuccess, setShowAlertSuccess] = useState(false);
     const [showAlertFailed, setShowAlertFailed] = useState(false);
+    const [showAlertFailedRestriction, setShowAlertFailedRestriction] = useState(false);
 
     const register = async() => {
-        try {
-            console.log(username, email, password);
-            
-            await axios.post('http://localhost:3000/user/register', {username, email, password});
-            setShowAlertSuccess(true);
-            setTimeout(() => {
-                setShowAlertSuccess(false);
-                navigate('/signin');
-            }, 2000);
-        } catch (error) {
-            console.error("Signup failed:", error.response?.data || error.message);
-            setShowAlertFailed(true);
-            setTimeout(() => {
-                setShowAlertFailed(false);
-            }, 2000);
+
+        const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        const isPasswordValid = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/.test(password);
+
+        if(isEmailValid && isPasswordValid && username.length > 3){
+            try {
+                await axios.post('http://localhost:3000/user/register', {username, email, password});
+                setShowAlertSuccess(true);
+                setTimeout(() => {
+                    setShowAlertSuccess(false);
+                    navigate('/signin');
+                }, 2000);
+            } catch (error) {
+                console.error("Signup failed:", error.response?.data || error.message);
+                setShowAlertFailed(true);
+                setTimeout(() => {
+                    setShowAlertFailed(false);
+                }, 2000);
+            }
+        }else{
+            setShowAlertFailedRestriction(true);
+                setTimeout(() => {
+                    setShowAlertFailedRestriction(false);
+                }, 2000);
         }
     }
 
@@ -42,6 +52,11 @@ function RegistrationPage(){
             {showAlertFailed && (
                 <div className="absolute top-4 right-4 bg-red-800 text-white px-4 py-2 rounded shadow-lg animate-fade-in-out z-50">
                     Sign up error
+                </div>
+            )}
+            {showAlertFailedRestriction && (
+                <div className="absolute top-4 right-4 bg-red-800 text-white px-4 py-2 rounded shadow-lg animate-fade-in-out z-50">
+                    Invalid username, email or password format. 
                 </div>
             )}
             <div className="w-screen h-screen bg-my-back flex justify-center items-center relative">

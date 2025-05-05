@@ -21,24 +21,31 @@ function AccountComponent(){
     const [enabledChanging, setEnableChanging] = useState(false);
 
     async function updateUsername(newUsername){
-        try {
-            const res = await axios.put('http://localhost:3000/account/update-account', { newUsername }, axiosConfig);
-            if (res.data.success) {
-                const updatedUser = { ...user, username: newUsername };
-                localStorage.setItem('user', JSON.stringify(updatedUser));
 
-                setShowAlertSuccess(true);
+        if(newUsername.length > 3){
+            try {
+                const res = await axios.put('http://localhost:3000/account/update-account', { newUsername }, axiosConfig);
+                if (res.data.success) {
+                    const updatedUser = { ...user, username: newUsername };
+                    localStorage.setItem('user', JSON.stringify(updatedUser));
+    
+                    setShowAlertSuccess(true);
+                    setTimeout(() => {
+                        setShowAlertSuccess(false);
+                    }, 2000);
+                }           
+    
+            } catch (error) {
+                setShowAlertFailed(true),
                 setTimeout(() => {
-                    setShowAlertSuccess(false);
-                    navigate('/home');
-                }, 2000);
-}
-
-        } catch (error) {
+                    setShowAlertFailed(false);
+                }, 2000)  
+            }
+        }else{
             setShowAlertFailed(true),
-            setTimeout(() => {
-                setShowAlertFailed(false);
-            }, 2000)  
+                setTimeout(() => {
+                    setShowAlertFailed(false);
+                }, 2000)  
         }
     }
 
@@ -51,7 +58,7 @@ function AccountComponent(){
             )}
             {showAlertFailed && (
                 <div className="fixed top-4 right-4 bg-red-800 text-white px-4 py-2 rounded shadow-lg animate-fade-in-out z-50">
-                    User with that username already exists!
+                    User with that username already exists or invalid username format!
                 </div>
             )}  
             {/* CONTENT */}
