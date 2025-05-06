@@ -125,10 +125,12 @@ function TodayTasksComponent(){
                                     <h3 className="font-robot font-bold text-2xl text-my-blue3 max-w-2/3">{task.title}</h3>
                                     <div className="text-sm text-gray-500 mb-3 flex gap-1">{task.deadline && (
                                         <div>Deadline: {new Date(task.deadline).toLocaleDateString('en-US', {
-                                            year: 'numeric',
-                                            month: 'long',
-                                            day: 'numeric',
-                                          })}</div>
+                                          timeZone: 'UTC',
+                                          year: 'numeric',
+                                          month: 'long',
+                                          day: 'numeric',
+                                        })}
+                                      </div>
                                     )}</div>
                                     <p className="font-robot font-normal text-md text-my-blue3 mb-3 text-justify">{task.description}</p>
                                     <p className="text-sm text-gray-500 mb-3">Priority: {task.priority}</p>
