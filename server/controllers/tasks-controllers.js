@@ -266,18 +266,24 @@ const fetchUncompletedTasks = async(req, res) => {
 const fetchTodayTasks = async(req, res) => {
     try {
         const userId = req.userInfo.id;
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
+
+        const startOfDay = new Date();
+        startOfDay.setHours(0, 0, 0, 0);
+        const endOfDay = new Date();
+        endOfDay.setHours(23, 59, 59, 999);
 
         const todayTasks = await Task.find({
             uploadedBy: userId,
-            deadline: { $eq: today }
+            deadline: {
+                $gte: startOfDay,
+                $lt: endOfDay
+            }
         });
 
         if(todayTasks.length === 0){
             return res.status(200).json({
                 success: true,
-                message: 'there is no uncompleted tasks',
+                message: 'there is no today tasks',
             });
         }
 
