@@ -21,7 +21,7 @@ function RegistrationPage(){
 
         if(isEmailValid && isPasswordValid && username.length > 3){
             try {
-                await axios.post('http://localhost:3000/user/register', {username, email, password});
+                await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/register`, {username, email, password});
                 setShowAlertSuccess(true);
                 setTimeout(() => {
                     setShowAlertSuccess(false);
