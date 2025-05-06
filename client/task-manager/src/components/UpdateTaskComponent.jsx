@@ -41,7 +41,7 @@ function UpdateTaskComponent() {
 
     const updateTask = async() => {
         try {
-            await axios.put(`${process.env.REACT_APP_API_BASE_URL}/task/update/${task._id}`, newTask, axiosConfig);
+            await axios.put(`${import.meta.env.VITE_API_BASE_URL}/task/update/${task._id}`, newTask, axiosConfig);
             console.log('updated successfully');
             setShowAlertSuccess(true);
             setTimeout(() => {

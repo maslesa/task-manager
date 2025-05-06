@@ -18,7 +18,7 @@ function AccountComponent(){
     async function updateUsername(newUsername){
         if(newUsername.length > 3){
             try {
-                const res = await axios.put(`${process.env.REACT_APP_API_BASE_URL}/account/update-account`, { newUsername }, axiosConfig);
+                const res = await axios.put(`${import.meta.env.VITE_API_BASE_URL}/account/update-account`, { newUsername }, axiosConfig);
                 if (res.data.success) {
                     const updatedUser = { ...user, username: newUsername };
                     localStorage.setItem('user', JSON.stringify(updatedUser));

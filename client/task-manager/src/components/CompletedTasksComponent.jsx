@@ -16,12 +16,12 @@ function CompletedTasksComponent(){
     const [completedTasks, setCompletedTasks] = useState([]);
 
     const fetchCompletedTasks = async() => {
-        const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/task/completed`, axiosConfig);
+        const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/task/completed`, axiosConfig);
         setCompletedTasks(res.data.data);
     }
     async function completeUncompleteTask(taskId){
         try {
-            await axios.put(`${process.env.REACT_APP_API_BASE_URL}/task/set-completed/${taskId}`, {}, axiosConfig);
+            await axios.put(`${import.meta.env.VITE_API_BASE_URL}/task/set-completed/${taskId}`, {}, axiosConfig);
             setShowTaskCompleted(true),
             fetchCompletedTasks();
             setTimeout(() => {
@@ -32,7 +32,7 @@ function CompletedTasksComponent(){
         }
     }
     async function deleteTask(taskId){
-        await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/task/delete/${taskId}`, axiosConfig);
+        await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/task/delete/${taskId}`, axiosConfig);
         fetchCompletedTasks();
     }
     async function tryDeleteTask(taskId){

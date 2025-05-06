@@ -14,7 +14,7 @@ function LoginPage(){
 
     const login = async() => {        
         try {
-            const res = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/login`, {username, password});            
+            const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/user/login`, {username, password});            
             localStorage.setItem('token', res.data.token);
             localStorage.setItem('user', JSON.stringify(res.data.user));
             setShowAlertSuccess(true);
@@ -23,6 +23,8 @@ function LoginPage(){
                 navigate('/home');
             }, 1000);
         } catch (error) {
+            console.log(error);
+            
             setShowAlertFailed(true);
             setTimeout(() => {
                 setShowAlertFailed(false);

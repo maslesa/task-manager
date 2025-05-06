@@ -15,12 +15,12 @@ function ImportantTasksComponent(){
     const undoDeleteRef = useRef(false);
 
     const fetchImportantTasks = async() => {
-        const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/task/important`, axiosConfig);
+        const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/task/important`, axiosConfig);
         setImportantTasks(res.data.data);
     }
     async function completeUncompleteTask(taskId){
         try {
-            await axios.put(`${process.env.REACT_APP_API_BASE_URL}/task/set-completed/${taskId}`, {}, axiosConfig);
+            await axios.put(`${import.meta.env.VITE_API_BASE_URL}/task/set-completed/${taskId}`, {}, axiosConfig);
             setShowTaskCompleted(true),
             fetchImportantTasks();
             setTimeout(() => {
@@ -31,7 +31,7 @@ function ImportantTasksComponent(){
         }
     }
     async function deleteTask(taskId){
-        await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/task/delete/${taskId}`, axiosConfig);
+        await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/task/delete/${taskId}`, axiosConfig);
         fetchImportantTasks();
     }
     async function tryDeleteTask(taskId){

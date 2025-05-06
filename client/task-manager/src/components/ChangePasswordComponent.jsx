@@ -29,7 +29,7 @@ function ChangePasswordComponent(){
                     }, 2000)
                 )
             }            
-            await axios.put(`${process.env.REACT_APP_API_BASE_URL}/account/update-password`, newPass, axiosConfig);
+            await axios.put(`${import.meta.env.VITE_API_BASE_URL}/account/update-password`, newPass, axiosConfig);
             setShowAlertSuccessPass(true),
             setTimeout(() => {
                 setShowAlertSuccessPass(false);
