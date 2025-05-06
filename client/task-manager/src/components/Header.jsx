@@ -13,7 +13,7 @@ function Header(){
                 <UserMenu showUserMenu={showUserMenu} setShowUserMenu={setShowUserMenu}/>
             )}
             <div className="max-w-screen w-full h-[120px] flex pl-20 pr-20 justify-between mb-5">
-                <a className="flex gap-1 justify-center items-center" href="/home">
+                <a className="flex gap-1 justify-center items-center" href="/">
                     <img className="w-10" src="/logo.png" alt="logo" />
                     <h2 className="font-roboto font-black text-2xl text-my-blue3">TaskManager</h2>
                 </a>
