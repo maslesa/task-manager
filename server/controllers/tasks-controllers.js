@@ -267,10 +267,20 @@ const fetchTodayTasks = async(req, res) => {
     try {
         const userId = req.userInfo.id;
 
-        const startOfDay = new Date();
-        startOfDay.setHours(0, 0, 0, 0);
-        const endOfDay = new Date();
-        endOfDay.setHours(23, 59, 59, 999);
+        const now = new Date();
+
+        const startOfDay = new Date(Date.UTC(
+            now.getUTCFullYear(),
+            now.getUTCMonth(),
+            now.getUTCDate(),
+            0, 0, 0, 0
+        ));
+        const endOfDay = new Date(Date.UTC(
+            now.getUTCFullYear(),
+            now.getUTCMonth(),
+            now.getUTCDate(),
+            23, 59, 59, 999
+        ));
 
         const todayTasks = await Task.find({
             uploadedBy: userId,
@@ -289,7 +299,7 @@ const fetchTodayTasks = async(req, res) => {
 
         res.status(200).json({
             success: true,
-            message: 'uncompleted tasks found successfully',
+            message: 'today tasks found successfully',
             tasks: todayTasks
         });
     } catch (error) {
