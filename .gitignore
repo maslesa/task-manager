@@ -1,4 +1,5 @@
 client/task-manager/node_modules
+client/task-manager/.env
 
 server/node_modules
 server/.env

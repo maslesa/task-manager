@@ -16,13 +16,13 @@ function UncompletedTasksComponent(){
 
 
     const fetchUncompletedTasks = async() => {
-        const res = await axios.get('http://localhost:3000/task/uncompleted', axiosConfig);
+        const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/task/uncompleted`, axiosConfig);
         console.log(res.data);
         setUncompletedTasks(res.data.tasks);
     }
     async function completeUncompleteTask(taskId){
         try {
-            await axios.put(`http://localhost:3000/task/set-completed/${taskId}`, {}, axiosConfig);
+            await axios.put(`${process.env.REACT_APP_API_BASE_URL}/task/set-completed/${taskId}`, {}, axiosConfig);
             setShowTaskCompleted(true),
             fetchUncompletedTasks();
             setTimeout(() => {
@@ -33,7 +33,7 @@ function UncompletedTasksComponent(){
         }
     }
     async function deleteTask(taskId){
-        await axios.delete(`http://localhost:3000/task/delete/${taskId}`, axiosConfig);
+        await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/task/delete/${taskId}`, axiosConfig);
         fetchUncompletedTasks();
     }
     async function tryDeleteTask(taskId){

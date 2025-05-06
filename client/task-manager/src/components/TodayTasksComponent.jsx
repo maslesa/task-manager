@@ -16,12 +16,12 @@ function TodayTasksComponent(){
     const [todayTasks, setTodayTasks] = useState([]);
 
     const fetchTodayTasks = async() => {
-        const res = await axios.get('http://localhost:3000/task/today', axiosConfig);        
+        const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/task/today`, axiosConfig);        
         setTodayTasks(res.data.tasks);
     }
     async function completeUncompleteTask(taskId){
         try {
-            await axios.put(`http://localhost:3000/task/set-completed/${taskId}`, {}, axiosConfig);
+            await axios.put(`${process.env.REACT_APP_API_BASE_URL}/task/set-completed/${taskId}`, {}, axiosConfig);
             setShowTaskCompleted(true),
             fetchTodayTasks();
             setTimeout(() => {
@@ -32,7 +32,7 @@ function TodayTasksComponent(){
         }
     }
     async function deleteTask(taskId){
-        await axios.delete(`http://localhost:3000/task/delete/${taskId}`, axiosConfig);
+        await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/task/delete/${taskId}`, axiosConfig);
         fetchTodayTasks();
     }
     async function tryDeleteTask(taskId){

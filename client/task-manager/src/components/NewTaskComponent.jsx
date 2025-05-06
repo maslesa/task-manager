@@ -24,7 +24,7 @@ function NewTaskComponent() {
     const addNewTask = async() => {
         try {
             if(newTask.title.length > 3){
-                await axios.post('http://localhost:3000/task/post', newTask, axiosConfig);
+                await axios.post(`${process.env.REACT_APP_API_BASE_URL}/task/post`, newTask, axiosConfig);
                 console.log('added successfully');
                 setShowAlertSuccess(true);
                 setTimeout(() => {
