@@ -118,7 +118,7 @@ function AllTasksComponent() {
                                     </div>
 
                                     {showWarning && (
-                                        <div className="absolute shadow-lg flex justify-center items-center w-12 h-6 sm:w-20 sm:h-8 sm:top-3 sm:right-3 top-2 right-2 bg-red-700 text-my-light rounded-lg font-roboto font-normal text-xs">
+                                        <div className="absolute shadow-lg flex justify-center items-center w-15 h-6 sm:w-20 sm:h-8 sm:top-3 sm:right-3 top-2 right-2 bg-red-700 text-my-light rounded-lg font-roboto font-normal text-xs">
                                             {task.priority}
                                         </div>
                                     )}
