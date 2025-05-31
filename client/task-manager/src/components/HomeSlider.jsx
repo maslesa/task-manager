@@ -32,7 +32,7 @@ function HomeSlider(){
 
     return(
         <>
-            <div className="mt-10 overflow-hidden w-2/3">
+            <div className="mt-10 overflow-hidden w-3/4 lg:w-2/3 h-8">
                 <Slider {...settings}>
                     <div className='mx-5'>
                         <div className="flex items-center gap-2 text-2xl font-roboto text-my-blue3 mr-2 ml-2">
@@ -54,7 +54,7 @@ function HomeSlider(){
                     </div>
                 </Slider>
             </div>
-            <div className="mt-5 overflow-hidden w-2/3">
+            <div className="mt-3 md:mt-5 mb-20 md:mb-0 overflow-hidden w-3/4 lg:w-2/3 h-8">
                 <Slider {...settings2}>
                     <div className='mx-2'>
                         <div className="flex items-center gap-2 text-2xl font-roboto text-my-blue3 mr-2 ml-2">

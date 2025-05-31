@@ -79,14 +79,14 @@ function TodayTasksComponent(){
                 </div>
             )}
             {/* TODAY TASKS */}
-            <div className="w-2/3 h-full flex flex-col mb-10">
+            <div className="w-3/4 lg:w-2/3 h-full flex flex-col mb-10">
                     <div className="flex items-center justify-between mb-5">
                         <div className="flex gap-1 justify-baseline items-center">
                             <img className="w-8" src="/calendar.png" alt="tasks" />
                             <h2 className="font-roboto font-black text-3xl text-my-blue3">Today tasks</h2>
                         </div>
                     </div>
-                    <div className="grid grid-cols-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
                         {todayTasks && todayTasks.length > 0 ? 
                         (todayTasks.map((task) => {
                             const showWarning = task.priority === 'high' || task.priority === 'very high';
@@ -147,7 +147,7 @@ function TodayTasksComponent(){
                             );
                         })
                         ) : (
-                            <div className="pl-10 font-roboto font-semibold text-2xl text-my-blue350">
+                            <div className="col-span-full pl-10 font-roboto font-semibold text-2xl text-my-blue350">
                                 No today tasks found.
                             </div>
                         )}

@@ -12,7 +12,7 @@ function Header(){
             {showUserMenu && (
                 <UserMenu showUserMenu={showUserMenu} setShowUserMenu={setShowUserMenu}/>
             )}
-            <div className="max-w-screen w-full h-[120px] flex pl-20 pr-20 justify-between mb-5">
+            <div className="max-w-screen w-full h-[120px] flex md:pl-20 md:pr-20 sm:pl-10 sm:pr-10 pl-5 pr-5 justify-between mb-5">
                 <a className="flex gap-1 justify-center items-center" href="/home">
                     <img className="w-10" src="/logo.png" alt="logo" />
                     <h2 className="font-roboto font-black text-2xl text-my-blue3">TaskManager</h2>
