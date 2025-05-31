@@ -63,23 +63,23 @@ function NewTaskComponent() {
                 <div className="w-full flex items-center justify-center">
                     <div className="flex gap-1 justify-baseline items-center">
                         <img className="w-8" src="/add.png" alt="tasks" />
-                        <h2 className="font-roboto font-black text-3xl text-my-blue3">Add new task</h2>
+                        <h2 className="font-roboto font-black text-2xl sm:text-3xl text-my-blue3">Add new task</h2>
                     </div>
                 </div>
-                <div className="flex flex-col gap-5 w-1/2 h-full p-3 pt-10">
+                <div className="flex flex-col gap-5 w-full sm:w-5/6 md:w-2/3 lg:w-1/2 h-full p-3 pt-10">
                     <div className="flex flex-col justify-center items-baseline">
-                        <label className="font-roboto font-bold text-2xl text-my-blue3 mb-1 cursor-pointer" htmlFor="title">Title:</label>
+                        <label className="font-roboto font-bold text-xl sm:text-2xl text-my-blue3 mb-1 cursor-pointer" htmlFor="title">Title:</label>
                         <input required minLength={3} maxLength={20} id="title" className="w-full outline-0 border-2 p-1 pl-3 rounded-lg border-my-blue3 font-roboto font-bold" type="text" 
                                 value={newTask.title} onChange={(e) => setNewTask({ ...newTask, title: e.target.value})}/>
                     </div>
                     <div className="flex flex-col justify-center items-baseline">
-                        <label className="font-roboto font-bold text-2xl text-my-blue3 mb-1 cursor-pointer" htmlFor="desc">Description:</label>
+                        <label className="font-roboto font-bold text-xl sm:text-2xl text-my-blue3 mb-1 cursor-pointer" htmlFor="desc">Description:</label>
                         <textarea maxLength={50} className="resize-none w-full outline-0 border-2 p-1 pl-3 rounded-lg border-my-blue3 font-roboto font-bold" name="" id="desc"
                                     value={newTask.description} onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
                         ></textarea>
                     </div>
                     <div className="flex flex-col justify-center items-baseline">
-                        <label className="font-roboto font-bold text-2xl text-my-blue3 mb-1 cursor-pointer" htmlFor="priority">Priority:</label>
+                        <label className="font-roboto font-bold text-xl sm:text-2xl text-my-blue3 mb-1 cursor-pointer" htmlFor="priority">Priority:</label>
                         <div className="relative w-full">
                             <input id='priority' type="text" onClick={() => setIsOpen(!isOpen)} readOnly placeholder="Select priority"
                                 className="w-full border-2 border-my-blue3 rounded-lg px-4 py-2 cursor-pointer outline-none font-roboto font-bold"
@@ -95,7 +95,7 @@ function NewTaskComponent() {
                         </div>
                     </div>
                     <div className="w-full flex flex-col justify-center items-baseline">
-                        <label className="font-roboto font-bold text-2xl text-my-blue3 mb-1 cursor-pointer" htmlFor="deadline">Deadline:</label>
+                        <label className="font-roboto font-bold text-xl sm:text-2xl text-my-blue3 mb-1 cursor-pointer" htmlFor="deadline">Deadline:</label>
                         <div className='w-full block'>
                             <DatePicker id="deadline" selected={startDate} onChange={(date) => {if(date){
                                                                                                     date.setHours(12, 0, 0, 0);
@@ -107,7 +107,7 @@ function NewTaskComponent() {
                         </div>
                     </div>
                     <div className='w-full flex justify-center items-center p-3 mt-3'>
-                        <div onClick={addNewTask} className="flex w-1/2 justify-center items-center p-4 border-2 rounded-xl font-roboto font-bold text-my-blue3 cursor-pointer duration-300 ease-in-out hover:text-my-back hover:bg-my-blue3">
+                        <div onClick={addNewTask} className="flex w-full sm:w-1/2 justify-center items-center p-4 border-2 rounded-xl font-roboto font-bold text-my-blue3 cursor-pointer duration-300 ease-in-out hover:text-my-back hover:bg-my-blue3">
                                 Add new task
                         </div>
                     </div>
