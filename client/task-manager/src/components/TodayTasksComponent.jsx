@@ -83,7 +83,7 @@ function TodayTasksComponent() {
                 <div className="flex items-center justify-between mb-5">
                     <div className="flex gap-1 justify-baseline items-center">
                         <img className="w-8" src="/calendar.png" alt="tasks" />
-                        <h2 className="font-roboto font-black text-3xl text-my-blue3">Today tasks</h2>
+                        <h2 className="font-roboto font-black text-2xl sm:text-3xl text-my-blue3">Today tasks</h2>
                     </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
@@ -94,7 +94,7 @@ function TodayTasksComponent() {
                                 <div key={task._id} className="relative group shadow-lg p-4 m-2 border-2 border-my-blue3 rounded-2xl bg-my-light h-50 hover:scale-101 duration-200 ease-in-out cursor-pointer">
 
                                     <div className="absolute inset-0 bg-gradient-to-t from-my-blue3 to-transparent flex items-end justify-center text-white text-lg font-roboto font-semibold rounded-lg opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                        <div className="w-full h-1/4 sm:h-1/3 flex justify-baseline items-center gap-3 pl-4 sm:pl-5">
+                                        <div className="w-full h-1/4 sm:h-1/3 flex justify-baseline items-center gap-3 pl-2 sm:pl-5">
                                             {task.status !== 'completed' ? (
                                                 <div onClick={() => completeUncompleteTask(task._id)} className="flex gap-1 justify-center items-center hover:scale-105 duration-200 ease-in-out">
                                                     <img className="w-4 sm:w-5" src="/done.png" alt="check" />
@@ -122,7 +122,7 @@ function TodayTasksComponent() {
                                             {task.priority}
                                         </div>
                                     )}
-                                    <h3 className="font-robot font-bold text-2xl text-my-blue3 max-w-2/3">{task.title}</h3>
+                                    <h3 className="font-robot font-bold text-xl sm:text-2xl text-my-blue3 max-w-2/3">{task.title}</h3>
                                     <div className="text-sm text-gray-500 mb-1 sm:mb-3 flex gap-1">{task.deadline && (
                                         <div>Deadline: {new Date(task.deadline).toLocaleDateString('en-US', {
                                             timeZone: 'UTC',
@@ -147,7 +147,7 @@ function TodayTasksComponent() {
                             );
                         })
                         ) : (
-                            <div className="col-span-full pl-10 font-roboto font-semibold text-2xl text-my-blue350">
+                            <div className="col-span-full pl-10 font-roboto font-semibold text-xl sm:text-2xl text-my-blue350">
                                 No today tasks found.
                             </div>
                         )}
