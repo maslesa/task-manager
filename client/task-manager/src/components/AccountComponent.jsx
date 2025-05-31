@@ -57,14 +57,14 @@ function AccountComponent(){
             )}  
             {/* CONTENT */}
             <div className="w-full h-full flex flex-col justify-center items-center">
-                    <div className="w-4/6 h-[480px] flex flex-col justify-baseline items-center">
+                    <div className="w-full sm:w-4/6 h-[480px] flex flex-col justify-baseline items-center">
                         <div className="w-full h-1/5 flex gap-2 justify-center items-center font-roboto font-bold text-3xl text-my-blue3 mb-15">
                             <img className="w-8" src="/login.png" alt="key" />
                             Account settings
                         </div>
                         <div className="w-5/6 h-full flex flex-col gap-5 items-center justify-base">
 
-                            <div className="w-1/2 font-roboto font-bold text-xl text-my-blue3 flex flex-col gap-2 items-baseline justify-center">
+                            <div className="w-full md:w-3/4 xl:w-1/2 font-roboto font-bold text-xl text-my-blue3 flex flex-col gap-2 items-baseline justify-center">
                                 <div className="w-full flex justify-between">
                                     <label className="cursor-pointer" htmlFor="username">Username:</label>
                                     {!enabledChanging ? (
@@ -88,7 +88,7 @@ function AccountComponent(){
                                 <input disabled={!enabledChanging} autoComplete="off" minLength={8} value={newUsername} onChange={(e) => {setNewUsername(e.target.value)}}
                                         className="border-2 outline-0 w-full p-1 pl-3 rounded-lg" type="text" id="username" />
                             </div>
-                            <div className="w-1/2 font-roboto font-bold text-xl text-my-blue3 flex flex-col gap-2 items-baseline justify-center">
+                            <div className="w-full md:w-3/4 xl:w-1/2 font-roboto font-bold text-xl text-my-blue3 flex flex-col gap-2 items-baseline justify-center">
                                 <label className="cursor-pointer" htmlFor="newpass">E-mail:</label>
                                 <input minLength={8} value={user.email} className="border-2 outline-0 w-full p-1 pl-3 rounded-lg" type="text" id="newpass" disabled />
                             </div>
