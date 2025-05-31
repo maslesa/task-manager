@@ -10,7 +10,10 @@ function UserMenu({ showUserMenu, setShowUserMenu }) {
             {/* USER MENU */}
             {showUserMenu && (
                 <div className="fixed inset-0 bg-my-back50 flex justify-end items-center z-40" onClick={() => setShowUserMenu(false)}>
-                    <div className={`w-[400px] h-screen bg-my-blue3 flex flex-col justify-baseline items-center shadow-2xl z-50 pt-15 relative transition-transform duration-500 ease-in-out ${showUserMenu ? "translate-x-0" : "translate-x-full"} `} onClick={(e) => e.stopPropagation()}>
+                    <div className="sm:hidden absolute top-7 right-7 z-60">
+                        <img className="w-6" src="/cancel2.png" alt="cancel" />
+                    </div>
+                    <div className={`w-screen sm:w-[400px] h-screen bg-my-blue3 flex flex-col justify-baseline items-center shadow-2xl z-50 pt-15 relative transition-transform duration-500 ease-in-out ${showUserMenu ? "translate-x-0" : "translate-x-full"} `} onClick={(e) => e.stopPropagation()}>
                         <div className="flex gap-5 mb-5 border-b-2 pb-7 border-my-back w-5/6">
                             <div className="flex justify-center items-center">
                                 <div onClick={() => {navigate('/account/settings');setShowUserMenu(false);}} className="shadow-lg w-12 h-12 bg-my-back rounded-[200px] flex justify-center items-center font-roboto font-bold text-xl text-my-blue3 cursor-pointer hover:scale-102 duration-200 ease-in-out">
