@@ -30,9 +30,6 @@ The app includes support for light and dark mode for a more personalized user ex
 - 🗑️ **Task Deletion**  
   Remove tasks that are no longer needed.
 
-- 🌗 **Dark/Light Mode**  
-  Toggle between dark and light themes for better readability and comfort.
-
 ---
 
 ## 🛠️ Tech Stack
