@@ -60,7 +60,7 @@ The app includes support for light and dark mode for a more personalized user ex
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/task-manager.git
+git clone https://github.com/maslesa/task-manager.git
 cd task-manager
 
 # Install backend dependencies
