@@ -1,20 +1,78 @@
-# Task Manager
+# ✅ Task Manager Application  
+Task Manager is a full-stack MERN application that helps users stay organized by allowing them to manage daily tasks with ease. Users can create an account, update their profile, and add tasks based on priority or status (e.g. today’s tasks, completed, important, etc.).  
+The app includes support for light and dark mode for a more personalized user experience.
 
-Task Manager is a full stack MERN project that allows users to create accounts, change account details, add, track, update and delete tasks.
+---
 
-## Features
+## 🚧 Status  
+**Project Completed** – All core features are fully functional and styled.
 
-- Create user accounts
-- Change account details
-- Add tasks (today, important, completed, uncompleted)
-- Track tasks
-- Update tasks
-- Delete tasks
+---
 
-## Usage
+## ✨ Features
 
-1. Start the development server using `npm run dev` in server folder.
-2. Start the development website using `npm run dev` in client/task-manager folder.
-3. Create a new user account or sign in with your existing account.
-4. Use the app to track, update, and delete your tasks.
+- 📝 **User Authentication**  
+  Register and securely log in to manage your tasks.
 
+- 👤 **Profile Management**  
+  Change your account details including name and password.
+
+- ➕ **Task Creation**  
+  Add new tasks categorized as:
+  - Today
+  - Important
+  - Completed
+  - Uncompleted
+
+- 🔄 **Task Tracking**  
+  Easily update the status of your tasks.
+
+- 🗑️ **Task Deletion**  
+  Remove tasks that are no longer needed.
+
+- 🌗 **Dark/Light Mode**  
+  Toggle between dark and light themes for better readability and comfort.
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+- React.js  
+- TailwindCSS
+
+### Backend
+- Node.js  
+- Express.js
+
+### Database
+- MongoDB
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js
+- MongoDB installed or a cloud MongoDB URI
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/your-username/task-manager.git
+cd task-manager
+
+# Install backend dependencies
+cd server
+npm install
+
+# Start the backend server
+npm run dev
+
+# Open a new terminal tab for frontend
+cd ../client/task-manager
+npm install
+
+# Start the frontend development server
+npm run dev
